@@ -1,38 +1,55 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-family: 'Commissioner', sans-serif;
+  font-style: normal;
+  background-color: #f2f2f2;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.header {
+  display: flex;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid black;
+  padding: 20px 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.headerLR {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.headerLogin {
+  margin-right: 20px;
+}
+
+/* .headerRegister{
+
+} */
+/*LOGIN FORM*/
+
+.loginForm {
+  /*min-height: 100vh;*/
+  width: 370px;
+  /*min-width: 100vw;*/
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: 200px auto;
 }
 
-.App-link {
-  color: #61dafb;
+.emailLogin {
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.passwordLogin {
+  display: flex;
+  flex-direction: column;
 }
