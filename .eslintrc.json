@@ -18,56 +18,5 @@
     "quotes": ["off", "single"]
   }
 }
-/*{
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "jest": true
-  },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "plugins": ["react"],
-  "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "react/react-in-jsx-scope": "off"
-  }
-}
-*/
-/*{
 
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true
-  },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
-  "parser": "react-scripts/node_modules/babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true,
-      "legacyDecorators": true
-    },
-    "sourceType": "module",
-    "allowImportExportEverywhere": false
-  },
-  "plugins": ["react"],
-  "rules": {
-    "indent": ["off", 4],
-    "linebreak-style": ["warn", "unix"],
-    "no-console": "off",
-    "no-mixed-spaces-and-tabs": "warn",
-    "no-unused-vars": "off",
-    "react/prop-types": ["warn", { "skipUndeclared": true }],
-    "quotes": ["off", "single"],
-    "semi": ["off", "always"]
-  }
-}
-*/
+
