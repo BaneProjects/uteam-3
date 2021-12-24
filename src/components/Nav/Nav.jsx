@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import './Nav.css';
-// import PropTypes from 'prop-types';
 import { Text } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -18,8 +16,5 @@ const Nav = () => {
   );
 };
 
-// Nav.propTypes = {
-//   naslov: PropTypes.string
-// };
 
 export default Nav;
