@@ -12,9 +12,7 @@ const Nav = () => {
       {/* <Image src="/static/media/logo.8eb02d2a92d7b3e5871f.png" w="180px" h="40px" /> */}
       {/* <Img src="/static/media/logo.8eb02d2a92d7b3e5871f.png" w="380px" h="40px" /> */}
       {/* <img src="./logo.png" alt="ee" /> */}
-      <Box>
-        LOGO
-      </Box>
+      <Box>LOGO</Box>
       <Box display="flex">
         <Link to={'/'}>
           <Button

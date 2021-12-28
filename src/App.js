@@ -4,7 +4,7 @@ import Register from './components/Register/Register';
 import Nav from './components/Nav/Nav';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
-import CompanyAdmin from './components/CompanyAdmin/CompanyAdmin';
+import { useState } from 'react';
 
 function App() {
   return (

@@ -22,7 +22,6 @@ const Login = () => {
       <Box w="400px" color="teal.400" textAlign="center">
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Login
-          <i class="fas fa-alarm-clock"></i>
         </Text>
         <Box bg="white" mt="20px" p="30px" borderRadius="5px" fontSize="16px" boxShadow="xl">
           <FormControl mb="20px">
