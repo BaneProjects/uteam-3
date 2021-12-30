@@ -1,11 +1,10 @@
-import { Text, Box, Flex, Button } from '@chakra-ui/react';
-import React from 'react';
-import { useUserContext } from '../context/userContext';
 import { Link } from 'react-router-dom';
+import { Box, Flex, Button } from '@chakra-ui/react';
 
+import { useContext } from 'react';
+import { AuthContext } from './UserContext';
 const Nav = () => {
-  const { user, logOut } = useUserContext();
-  console.log(user);
+  const { providerValue, logout } = useContext(AuthContext);
   return (
     <Flex
       justifyContent="space-between"
@@ -15,50 +14,58 @@ const Nav = () => {
       color="white">
       <Box>LOGO</Box>
       <Box display="flex">
-        {user.isGuestUser ? (
-          <Link to={''}>
+        {providerValue.user ? (
+          <Link to={'/profile'}>
             <Button
               borderRadius="10px"
               bg="teal.400"
+              mr="10px"
               p="3px 20px"
               _hover={{ bg: 'teal.600' }}
               _focus={{ outline: 'none' }}>
-              <Text>Login</Text>
+              Profile
             </Button>
           </Link>
         ) : (
-          <Button
-            onClick={logOut}
-            borderRadius="10px"
-            bg="teal.400"
-            p="3px 20px"
-            _hover={{ bg: 'teal.600' }}
-            _focus={{ outline: 'none' }}>
-            <Text>LogOut</Text>
-          </Button>
+          <Link to={'/'}>
+            <Button
+              borderRadius="10px"
+              bg="teal.400"
+              mr="10px"
+              p="3px 20px"
+              _hover={{ bg: 'teal.600' }}
+              _focus={{ outline: 'none' }}>
+              Login
+            </Button>
+          </Link>
         )}
-        {user.isGuestUser ? (
-          <Link to={'register'}>
+        {providerValue.user ? (
+          <Link to={'/'}>
+            <Button
+              onClick={() => {
+                logout(null);
+              }}
+              borderRadius="10px"
+              bg="teal.400"
+              mr="10px"
+              p="3px 20px"
+              _hover={{ bg: 'teal.600' }}
+              _focus={{ outline: 'none' }}>
+              Logout
+            </Button>
+          </Link>
+        ) : (
+          <Link to={'/register'}>
             <Button
               borderRadius="10px"
               bg="teal.400"
               p="3px 20px"
-              ml="10px"
+              mr="10px"
               _hover={{ bg: 'teal.600' }}
               _focus={{ outline: 'none' }}>
-              <Text>Register</Text>
+              Register
             </Button>
           </Link>
-        ) : (
-          <Button
-            borderRadius="10px"
-            bg="teal.400"
-            p="3px 20px"
-            ml="10px"
-            _hover={{ bg: 'teal.600' }}
-            _focus={{ outline: 'none' }}>
-            <Text>MyProfile</Text>
-          </Button>
         )}
       </Box>
     </Flex>

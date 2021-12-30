@@ -1,7 +1,3 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useUserContext } from '../context/userContext';
-import { Link } from 'react-router-dom';
 import {
   Flex,
   Input,
@@ -13,66 +9,63 @@ import {
   Box,
   Text
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
+import { useState, useContext } from 'react';
+import { AuthContext } from './UserContext';
 
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
 
 const Login = () => {
-  const { register, handleSubmit, errors } = useForm();
-  const email = register('username');
-  const { logIn } = useUserContext();
-  const onSubmit = (data) => {
-    logIn(data.username);
-    console.log('Form data', data);
-  };
-  console.log(errors);
-
+  const [email, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useContext(AuthContext);
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box w="400px" color="teal.400" textAlign="center">
+      <Box color="teal.400" textAlign="center" width={['300px', '400px']}>
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Login
         </Text>
         <Box bg="white" mt="20px" p="30px" borderRadius="5px" fontSize="16px" boxShadow="xl">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl mb="20px">
-              <Text textAlign="left" mb="2.5px">
-                Email
-              </Text>
-              <InputGroup color="black">
-                <InputLeftElement children={<CHiOutlineMail color="gray.300" />} />
-                <Input
-                  name="username"
-                  type="email"
-                  id="emaill"
-                  placeholder="Email address"
-                  _focus={{ border: '1px solid #007C8C' }}
-                  // ref={email}
-                />
-              </InputGroup>
-            </FormControl>
-            <FormControl mb="20px">
-              <Text textAlign="left" mb="2.5px">
-                Password
-              </Text>
-              <InputGroup color="black">
-                <InputLeftElement children={<CFiLock color="gray.300" />} />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  id="pass"
-                  _focus={{ border: '1px solid #007C8C' }}
-                />
-              </InputGroup>
-            </FormControl>
-            <Flex justifyContent="space-between" alignItems="center">
-              <Link to={'register'}>
-                <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
-              </Link>
+          <FormControl mb="20px">
+            <Text textAlign="left" mb="2.5px">
+              Email
+            </Text>
+            <InputGroup color="black">
+              <InputLeftElement children={<CHiOutlineMail color="gray.300" />} />
+              <Input
+                value={email}
+                onChange={(e) => setName(e.target.value)}
+                type="email"
+                placeholder="Email address"
+                _focus={{ border: '1px solid #007C8C' }}
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl mb="20px">
+            <Text textAlign="left" mb="2.5px">
+              Password
+            </Text>
+            <InputGroup color="black">
+              <InputLeftElement children={<CFiLock color="gray.300" />} />
+              <Input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Password"
+                _focus={{ border: '1px solid #007C8C' }}
+              />
+            </InputGroup>
+          </FormControl>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Link to={'/register'}>
+              <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
+            </Link>
+            <Link to={'/profile'}>
               <Button
-                type="submit"
+                onClick={() => login(email, password)}
                 color="white"
                 borderRadius="10px"
                 bg="teal.400"
@@ -82,8 +75,8 @@ const Login = () => {
                 _focus={{ outline: 'none' }}>
                 Login
               </Button>
-            </Flex>
-          </form>
+            </Link>
+          </Flex>
         </Box>
       </Box>
     </Flex>
