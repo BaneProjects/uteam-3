@@ -8,7 +8,6 @@ import {
   Text,
   InputLeftElement,
   InputGroup,
-  FormLabel
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { FiUser, FiLock } from 'react-icons/fi';
@@ -22,7 +21,7 @@ const CFiLock = chakra(FiLock);
 const Register = () => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (d) => {
-    console.log('registrovan korisnik je: ' + JSON.stringify(d));
+    console.log("test register", JSON.stringify(d));
     alert('Uspesno ste registrovani!');
   };
   return (

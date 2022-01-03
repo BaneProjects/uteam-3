@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Box, Flex, Button } from '@chakra-ui/react';
-
 import { useContext } from 'react';
 import { AuthContext } from './UserContext';
 const Nav = () => {
-  const { providerValue, logout } = useContext(AuthContext);
+  const { userData, logout } = useContext(AuthContext);
   return (
     <Flex
       justifyContent="space-between"
@@ -14,7 +13,7 @@ const Nav = () => {
       color="white">
       <Box>LOGO</Box>
       <Box display="flex">
-        {providerValue.user ? (
+        {userData.user ? (
           <Link to={'/profile'}>
             <Button
               borderRadius="10px"
@@ -39,7 +38,7 @@ const Nav = () => {
             </Button>
           </Link>
         )}
-        {providerValue.user ? (
+        {userData.user ? (
           <Link to={'/'}>
             <Button
               onClick={() => {

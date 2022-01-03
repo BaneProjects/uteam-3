@@ -8,17 +8,21 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 import { AuthContext } from './components/UserContext';
 function App() {
-  const { providerValue } = useContext(AuthContext);
-  console.log('test', providerValue);
+  const { userData } = useContext(AuthContext);
+  console.log('test', userData);
   return (
     <ChakraProvider>
       <Box backgroundColor="gray.200" idth="100wh" minH="100vh">
         <Router>
-          <Nav></Nav>
+          <Nav />
           <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh">
             <Routes>
-              {/* <Route path={"/"} element={providerValue.user ? <Profile/> : <Login />} /> */}
-              {providerValue.user ? <Route path={"/profile"} element={<Profile />}/> : <Route path={"/"} element={<Login />}/>}
+              {/* <Route path={"/"} element={userData.user ? <Profile/> : <Login />} /> */}
+              {userData.user ? (
+                <Route path={'/profile'} element={<Profile />} />
+              ) : (
+                <Route path={'/'} element={<Login />} />
+              )}
               <Route path="/register" element={<Register />} />
             </Routes>
           </Box>

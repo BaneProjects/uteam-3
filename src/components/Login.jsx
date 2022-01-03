@@ -19,7 +19,7 @@ const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
 
 const Login = () => {
-  const [email, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
   return (
@@ -37,7 +37,7 @@ const Login = () => {
               <InputLeftElement children={<CHiOutlineMail color="gray.300" />} />
               <Input
                 value={email}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Email address"
                 _focus={{ border: '1px solid #007C8C' }}
