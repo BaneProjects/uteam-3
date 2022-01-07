@@ -7,22 +7,41 @@ import {
   chakra,
   Text,
   InputLeftElement,
-  InputGroup,
+  InputGroup
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 const CFiUser = chakra(FiUser);
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
 
-const Register = () => {
+const Register = (props) => {
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
   const onSubmit = (d) => {
-    console.log("test register", JSON.stringify(d));
-    alert('Uspesno ste registrovani!');
+    console.log('test register', JSON.stringify(d));
+    axios
+      .post('http://localhost:1337/api/auth/local/register', {
+        username: d.name,
+        email: d.email,
+        password: d.password
+      })
+      .then((response) => {
+        // Handle success.
+        console.log('Well done!');
+        console.log('User profile', response.data.user);
+        console.log('User token', response.data.jwt);
+        alert('Uspesno ste registrovani!');
+        navigate('/');
+      })
+      .catch((error) => {
+        // Handle error.
+        console.log('An error occurred:', error.response);
+      });
   };
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -72,12 +91,12 @@ const Register = () => {
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mb="20px">
+            {/* <FormControl mb="20px">
               <Text textAlign="left" mb="2.5px">
                 Profile Photo
               </Text>
               <Input p="3px" type="file" {...register('profilePhoto')} />
-            </FormControl>
+            </FormControl> */}
             <Flex justifyContent="space-between" alignItems="center">
               <Link to={'/'}>
                 <Text _hover={{ color: 'teal.600' }}>Already have an account?</Text>

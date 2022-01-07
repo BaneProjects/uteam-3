@@ -22,6 +22,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
+
+  const loginFunction = () => {
+    login(email, password);
+  };
   return (
     <Flex justifyContent="center" alignItems="center">
       <Box color="teal.400" textAlign="center" width={['300px', '400px']}>
@@ -63,19 +67,17 @@ const Login = () => {
             <Link to={'/register'}>
               <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
             </Link>
-            <Link to={'/profile'}>
-              <Button
-                onClick={() => login(email, password)}
-                color="white"
-                borderRadius="10px"
-                bg="teal.400"
-                p="3px 20px"
-                ml="10px"
-                _hover={{ bg: 'teal.600' }}
-                _focus={{ outline: 'none' }}>
-                Login
-              </Button>
-            </Link>
+            <Button
+              onClick={loginFunction}
+              color="white"
+              borderRadius="10px"
+              bg="teal.400"
+              p="3px 20px"
+              ml="10px"
+              _hover={{ bg: 'teal.600' }}
+              _focus={{ outline: 'none' }}>
+              Login
+            </Button>
           </Flex>
         </Box>
       </Box>
