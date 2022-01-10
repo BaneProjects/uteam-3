@@ -22,13 +22,13 @@ const CFiLock = chakra(FiLock);
 const Register = (props) => {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  const onSubmit = (d) => {
-    console.log('test register', JSON.stringify(d));
+  const onSubmit = (user) => {
+    console.log('test register', JSON.stringify(user));
     axios
       .post('http://localhost:1337/api/auth/local/register', {
-        username: d.name,
-        email: d.email,
-        password: d.password
+        username: user.name,
+        email: user.email,
+        password: user.password
       })
       .then((response) => {
         // Handle success.

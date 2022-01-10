@@ -24,7 +24,9 @@ const Login = () => {
   const { login } = useContext(AuthContext);
 
   const loginFunction = () => {
-    login(email, password);
+    if (email !== '' && password !== '') {
+      login(email, password);
+    }
   };
   return (
     <Flex justifyContent="center" alignItems="center">
