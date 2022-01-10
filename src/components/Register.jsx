@@ -45,7 +45,7 @@ const Register = (props) => {
   };
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box w={['300px', '400px']} color="teal.400" textAlign="center">
+      <Box w={{ base: '300px', sm: '400px' }} color="teal.400" textAlign="center">
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Register
         </Text>

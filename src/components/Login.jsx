@@ -30,7 +30,7 @@ const Login = () => {
   };
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box color="teal.400" textAlign="center" width={['300px', '400px']}>
+      <Box color="teal.400" textAlign="center" width={{base:'300px', sm:'400px'}}>
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Login
         </Text>
