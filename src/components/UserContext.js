@@ -1,38 +1,50 @@
-import { createContext, useState, useMemo } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useState, useContext } from "react";
+import { login } from "../services/auth";
+import { register } from "../services/register";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
-
+const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  let [user, setUser] = useState(null);
-  const userData = useMemo(() => ({ user }), [user]);
-  const login = (email, pass) => {
-    axios
-      .post('http://localhost:1337/api/auth/local', {
-        identifier: email,
-        password: pass
-      })
-      .then((response) => {
-        console.log('Well done!');
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
-        setUser({ email: email, pass: pass });
-        navigate('/profile');
-      })
-      .catch((error) => {
-        console.log('An error occurred:', error.response);
-        setUser(null);
-        navigate('/');
-      });
+
+  const registerFunction = async (name, email, pass) => {
+    try {
+      await register(name, email, pass);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const logout = () => {
+
+  const loginFunction = async (email, pass) => {
+    try {
+      const authUser = await login(email, pass);
+      if (authUser) {
+        setUser(authUser);
+        console.log("successful login");
+        navigate("/profile");
+      } else {
+        console.log("failed login");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      setUser(null);
+    }
+  };
+
+  const logoutFunction = () => {
     setUser(null);
   };
+
   return (
-    <AuthContext.Provider value={{ userData, login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ user, loginFunction, logoutFunction, registerFunction }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export { AuthProvider, AuthContext };
+export { AuthProvider, AuthContext, useAuthContext };

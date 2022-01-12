@@ -12,8 +12,8 @@ import {
 import { Link } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
-import { useState, useContext } from 'react';
-import { AuthContext } from './UserContext';
+import { useState } from 'react';
+import { useAuthContext } from './UserContext';
 
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
@@ -21,12 +21,10 @@ const CFiLock = chakra(FiLock);
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const { loginFunction } = useAuthContext();
 
-  const loginFunction = () => {
-    if (email !== '' && password !== '') {
-      login(email, password);
-    }
+  const onClick = () => {
+      loginFunction(email, password);
   };
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -70,7 +68,7 @@ const Login = () => {
               <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
             </Link>
             <Button
-              onClick={loginFunction}
+              onClick={onClick}
               color="white"
               borderRadius="10px"
               bg="teal.400"
