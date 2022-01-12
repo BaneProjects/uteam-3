@@ -1,6 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import { login } from "../services/auth";
-import { register } from "../services/register";
+import { login, register } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
