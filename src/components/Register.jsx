@@ -75,12 +75,12 @@ const Register = () => {
                 />
               </InputGroup>
             </FormControl>
-            {/* <FormControl mb="20px">
+            <FormControl mb="20px">
               <Text textAlign="left" mb="2.5px">
                 Profile Photo
               </Text>
               <Input p="3px" type="file" {...register('profilePhoto')} />
-            </FormControl> */}
+            </FormControl>
             <Flex justifyContent="space-between" alignItems="center">
               <Link to={'/'}>
                 <Text _hover={{ color: 'teal.600' }}>Already have an account?</Text>

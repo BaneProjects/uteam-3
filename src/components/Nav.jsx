@@ -5,7 +5,7 @@ import { AuthContext } from './UserContext';
 import logo from '../assets/logo.png';
 
 const Nav = () => {
-  const { user, isLoggedIn, logoutFunction } = useContext(AuthContext);
+  const { user, logoutFunction } = useContext(AuthContext);
   return (
     <Flex
       justifyContent="space-between"
@@ -18,7 +18,7 @@ const Nav = () => {
       flexDirection={{ base: 'column', sm: 'row' }}>
       <Img src={logo} w="220px" marginBottom={{ base: '20px', sm: '0' }} alt="logo" />
       <Box display="flex">
-        {user || isLoggedIn ? (
+        {user ? (
           <Link to={'/profile'}>
             <Button
               borderRadius="10px"
@@ -43,7 +43,7 @@ const Nav = () => {
             </Button>
           </Link>
         )}
-        {user || isLoggedIn ? (
+        {user ? (
           <Link to={'/'}>
             <Button
               onClick={() => {

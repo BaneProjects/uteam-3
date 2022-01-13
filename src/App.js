@@ -12,7 +12,7 @@ function App() {
   const { setUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('User');
+    const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) {
       const foundUser = JSON.parse(loggedInUser);
       setUser(foundUser);

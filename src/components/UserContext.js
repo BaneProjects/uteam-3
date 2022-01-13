@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
       if (authUser.data.user) {
         setUser(authUser.data);
         setIsLoggedIn(true);
-        localStorage.setItem('User', JSON.stringify(authUser.data));
+        localStorage.setItem('user', JSON.stringify(authUser.data));
         navigate('/profile');
         console.log('successful login');
         console.log(authUser.data);
@@ -31,7 +31,8 @@ const AuthProvider = ({ children }) => {
       if (authUser) {
         setIsLoggedIn(true);
         navigate('/profile');
-        localStorage.setItem('User', JSON.stringify(authUser));
+        setUser(authUser);
+        localStorage.setItem('user', JSON.stringify(authUser));
         console.log('successful login');
       } else {
         console.log('failed login');
