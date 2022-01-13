@@ -7,13 +7,13 @@ import {
   chakra,
   Text,
   InputLeftElement,
-  InputGroup,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { FiUser, FiLock } from "react-icons/fi";
-import { HiOutlineMail } from "react-icons/hi";
-import { useForm } from "react-hook-form";
-import { useAuthContext } from "./UserContext";
+  InputGroup
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { FiUser, FiLock } from 'react-icons/fi';
+import { HiOutlineMail } from 'react-icons/hi';
+import { useForm } from 'react-hook-form';
+import { useAuthContext } from './UserContext';
 
 const CFiUser = chakra(FiUser);
 const CHiOutlineMail = chakra(HiOutlineMail);
@@ -24,27 +24,16 @@ const Register = () => {
   const { registerFunction } = useAuthContext();
 
   const onSubmit = async (user) => {
-    console.log("test register", JSON.stringify(user));
+    console.log('test register', JSON.stringify(user));
     await registerFunction(user);
   };
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box
-        w={{ base: "300px", sm: "400px" }}
-        color="teal.400"
-        textAlign="center"
-      >
+      <Box w={{ base: '300px', sm: '400px' }} color="teal.400" textAlign="center">
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Register
         </Text>
-        <Box
-          bg="white"
-          mt="20px"
-          p="30px"
-          borderRadius="5px"
-          fontSize="16px"
-          boxShadow="xl"
-        >
+        <Box bg="white" mt="20px" p="30px" borderRadius="5px" fontSize="16px" boxShadow="xl">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mb="20px">
               <Text textAlign="left" mb="2.5px">
@@ -53,11 +42,10 @@ const Register = () => {
               <InputGroup color="black">
                 <InputLeftElement children={<CFiUser color="gray.300" />} />
                 <Input
-                  {...register("name")}
+                  {...register('name')}
                   type="text"
                   placeholder="Name"
-                  _focus={{ border: "1px solid #007C8C" }}
-                ></Input>
+                  _focus={{ border: '1px solid #007C8C' }}></Input>
               </InputGroup>
             </FormControl>
             <FormControl mb="20px">
@@ -65,15 +53,12 @@ const Register = () => {
                 Email
               </Text>
               <InputGroup color="black">
-                <InputLeftElement
-                  children={<CHiOutlineMail color="gray.300" />}
-                />
+                <InputLeftElement children={<CHiOutlineMail color="gray.300" />} />
                 <Input
-                  {...register("email")}
+                  {...register('email')}
                   type="email"
                   placeholder="Email address"
-                  _focus={{ border: "1px solid #007C8C" }}
-                ></Input>
+                  _focus={{ border: '1px solid #007C8C' }}></Input>
               </InputGroup>
             </FormControl>
             <FormControl mb="20px">
@@ -81,15 +66,12 @@ const Register = () => {
                 Password
               </Text>
               <InputGroup color="black">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<CFiLock color="gray.300" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<CFiLock color="gray.300" />} />
                 <Input
-                  {...register("password")}
+                  {...register('password')}
                   type="password"
                   placeholder="Password"
-                  _focus={{ border: "1px solid #007C8C" }}
+                  _focus={{ border: '1px solid #007C8C' }}
                 />
               </InputGroup>
             </FormControl>
@@ -100,10 +82,8 @@ const Register = () => {
               <Input p="3px" type="file" {...register('profilePhoto')} />
             </FormControl> */}
             <Flex justifyContent="space-between" alignItems="center">
-              <Link to={"/"}>
-                <Text _hover={{ color: "teal.600" }}>
-                  Already have an account?
-                </Text>
+              <Link to={'/'}>
+                <Text _hover={{ color: 'teal.600' }}>Already have an account?</Text>
               </Link>
               <Button
                 type="submit"
@@ -112,9 +92,8 @@ const Register = () => {
                 bg="teal.400"
                 p="3px 20px"
                 ml="10px"
-                _hover={{ bg: "teal.600" }}
-                _focus={{ outline: "none" }}
-              >
+                _hover={{ bg: 'teal.600' }}
+                _focus={{ outline: 'none' }}>
                 Register
               </Button>
             </Flex>

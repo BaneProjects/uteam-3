@@ -24,11 +24,11 @@ const Login = () => {
   const { loginFunction } = useAuthContext();
 
   const onClick = () => {
-      loginFunction(email, password);
+    loginFunction(email, password);
   };
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box color="teal.400" textAlign="center" width={{base:'300px', sm:'400px'}}>
+      <Box color="teal.400" textAlign="center" width={{ base: '300px', sm: '400px' }}>
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Login
         </Text>
