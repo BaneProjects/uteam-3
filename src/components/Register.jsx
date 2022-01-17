@@ -3,6 +3,7 @@ import {
   Input,
   Button,
   FormControl,
+  FormLabel,
   Box,
   chakra,
   Text,
@@ -14,6 +15,7 @@ import { FiUser, FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { useForm } from 'react-hook-form';
 import { useAuthContext } from './UserContext';
+import { useRef, useState } from 'react';
 
 const CFiUser = chakra(FiUser);
 const CHiOutlineMail = chakra(HiOutlineMail);
@@ -22,9 +24,11 @@ const CFiLock = chakra(FiLock);
 const Register = () => {
   const { register, handleSubmit } = useForm();
   const { registerFunction } = useAuthContext();
+  const filePicker = useRef(null);
+  const [file, setFile] = useState();
 
   const onSubmit = async (user) => {
-    console.log('test register', JSON.stringify(user));
+    // console.log("test register", JSON.stringify(user));
     await registerFunction(user);
   };
   return (
@@ -75,12 +79,35 @@ const Register = () => {
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mb="20px">
-              <Text textAlign="left" mb="2.5px">
-                Profile Photo
+            <InputGroup
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb="20px">
+              <Button
+                _focus={{ outline: 'none' }}
+                _hover={{
+                  background: 'teal.600'
+                }}
+                color="white"
+                bg="teal.400"
+                borderRadius="10px"
+                onClick={() => {
+                  filePicker.current.click();
+                }}>
+                {' '}
+                Choose Photo
+              </Button>
+              <Text htmlFor="file-upload" fontSize="12px" color="black.200">
+                {file ? file[0].name : 'No file chosen'}
               </Text>
-              <Input p="3px" type="file" {...register('profilePhoto')} />
-            </FormControl>
+              <Input
+                type="file"
+                ref={filePicker}
+                display="none"
+                onChange={(e) => setFile(e.target.files)}
+              />
+            </InputGroup>
             <Flex justifyContent="space-between" alignItems="center">
               <Link to={'/'}>
                 <Text _hover={{ color: 'teal.600' }}>Already have an account?</Text>

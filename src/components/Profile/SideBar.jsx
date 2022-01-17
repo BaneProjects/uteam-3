@@ -1,4 +1,5 @@
-import { Box, Link } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 const SideBar = () => {
   return (
@@ -12,21 +13,29 @@ const SideBar = () => {
       flexDirection={{ base: 'row', md: 'column' }}
       p={{ base: '', md: '20px' }}
       textAlign={{ base: 'center', md: '' }}>
-      <Link p="10px 10px" href="#">
-        Pending for approval
-      </Link>
-      <Link p="10px 10px" href="#">
-        Team
-      </Link>
-      <Link p="10px 10px" href="#">
-        Questions
-      </Link>
-      <Link p="10px 10px" href="#">
-        Company info
-      </Link>
-      <Link p="10px 10px" href="#">
-        My Profile
-      </Link>
+      <Box p="10px 10px">
+        <Link to="/pending-for-approval">Pending for approval</Link>
+      </Box>
+      <Box p="10px 10px">
+        <Link to="/team" p="10px 10px">
+          Team
+        </Link>
+      </Box>
+      <Box p="10px 10px">
+        <Link to="/questions" p="10px 10px">
+          Questions
+        </Link>
+      </Box>
+      <Box p="10px 10px">
+        <Link to="/company-info" p="10px 10px">
+          Company info
+        </Link>
+      </Box>
+      <Box p="10px 10px">
+        <Link to="/my-profile" p="10px 10px">
+          My Profile
+        </Link>
+      </Box>
     </Box>
   );
 };

@@ -14,7 +14,6 @@ import { FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { useState } from 'react';
 import { useAuthContext } from './UserContext';
-
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
 
@@ -23,8 +22,13 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { loginFunction } = useAuthContext();
 
-  const onClick = () => {
-    loginFunction(email, password);
+  const handleLogIn = (e) => {
+    e.preventDefault();
+    const data = {
+      email,
+      password
+    };
+    loginFunction(data)
   };
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -68,7 +72,7 @@ const Login = () => {
               <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
             </Link>
             <Button
-              onClick={onClick}
+              onClick={handleLogIn}
               color="white"
               borderRadius="10px"
               bg="teal.400"

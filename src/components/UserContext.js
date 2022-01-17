@@ -1,39 +1,51 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { login, register } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
+import createAxios from '../services/http';
 
 const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
-  const registerFunction = async (name, email, pass) => {
+  useEffect(() => {
+    createAxios
+      .get('http://localhost:1337/api/users/me')
+      .then((res) => {
+        console.log(res);
+        setUser(res.data);
+      })
+      .catch((err) => {
+        setUser(null);
+        navigate('/');
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const navigate = useNavigate();
+  const registerFunction = async (payload) => {
     try {
-      const authUser = await register(name, email, pass);
+      let authUser = await register(payload);
       if (authUser.data.user) {
+        console.log('token', authUser.data.jwt);
         setUser(authUser.data);
-        setIsLoggedIn(true);
-        localStorage.setItem('user', JSON.stringify(authUser.data));
-        navigate('/profile');
-        console.log('successful login');
-        console.log(authUser.data);
+        localStorage.setItem('token', authUser.data.jwt);
+        navigate('/my-profile');
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const loginFunction = async (email, pass) => {
+  const loginFunction = async (payload) => {
     try {
-      const authUser = await login(email, pass);
+      const authUser = await login(payload);
+      console.log(payload);
       if (authUser) {
-        setIsLoggedIn(true);
-        navigate('/profile');
+        localStorage.setItem('token', authUser.data.jwt);
         setUser(authUser);
-        localStorage.setItem('user', JSON.stringify(authUser));
-        console.log('successful login');
+
+        navigate('/my-profile');
       } else {
         console.log('failed login');
         navigate('/');
@@ -46,14 +58,11 @@ const AuthProvider = ({ children }) => {
 
   const logoutFunction = () => {
     setUser(null);
-    setIsLoggedIn(false);
-    console.log('logout');
-    localStorage.clear();
+    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, loginFunction, logoutFunction, registerFunction, isLoggedIn }}>
+    <AuthContext.Provider value={{ user, loginFunction, logoutFunction, registerFunction }}>
       {children}
     </AuthContext.Provider>
   );

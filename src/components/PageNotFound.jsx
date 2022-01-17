@@ -1,12 +1,12 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Button } from '@chakra-ui/react';
+import { useParams, useNavigate } from "react-router-dom";
+import { Box, Button } from "@chakra-ui/react";
 
 const PageNotFound = () => {
   const params = useParams();
   const navigate = useNavigate();
 
   const goHome = () => {
-    navigate('/');
+    navigate("/");
   };
   return (
     <Box display="flex" alignItems="center" flexDirection="column">
@@ -18,8 +18,9 @@ const PageNotFound = () => {
         borderRadius="10px"
         bg="teal.400"
         p="3px 20px"
-        _hover={{ bg: 'teal.600' }}
-        _focus={{ outline: 'none' }}>
+        _hover={{ bg: "teal.600" }}
+        _focus={{ outline: "none" }}
+      >
         Home
       </Button>
     </Box>
