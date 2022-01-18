@@ -6,20 +6,24 @@ import createAxios from '../services/http';
 const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     createAxios
       .get('http://localhost:1337/api/users/me')
       .then((res) => {
         console.log(res);
+        setIsLoggedIn(true);
         setUser(res.data);
+        navigate("/my-profile")
       })
       .catch((err) => {
         setUser(null);
-        navigate('/');
+        setIsLoggedIn(false);
+        // navigate('/');
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navigate = useNavigate();
@@ -43,8 +47,8 @@ const AuthProvider = ({ children }) => {
       console.log(payload);
       if (authUser) {
         localStorage.setItem('token', authUser.data.jwt);
+        setIsLoggedIn(true);
         setUser(authUser);
-
         navigate('/my-profile');
       } else {
         console.log('failed login');
@@ -59,10 +63,12 @@ const AuthProvider = ({ children }) => {
   const logoutFunction = () => {
     setUser(null);
     localStorage.removeItem('token');
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginFunction, logoutFunction, registerFunction }}>
+    <AuthContext.Provider
+      value={{ user, loginFunction, logoutFunction, registerFunction, isLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

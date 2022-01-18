@@ -23,6 +23,7 @@ const Nav = () => {
         marginBottom={{ base: "20px", sm: "0" }}
         alt="logo"
       />
+      <Box>{user ? user.username : ""}</Box>
       <Box display="flex">
         {user ? (
           <Link to={"/my-profile"}>

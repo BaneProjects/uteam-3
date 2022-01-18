@@ -20,7 +20,7 @@ createAxios.interceptors.request.use((req) => {
   try {
     console.log(jwtDecode(token));
   } catch (error) {
-    console.log("token doesn't work:", error);
+    console.log("token doesn't work: ", error);
   }
   if (token) {
     console.log('token:', token);
