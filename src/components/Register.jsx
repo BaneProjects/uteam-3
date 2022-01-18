@@ -79,11 +79,7 @@ const Register = () => {
                 />
               </InputGroup>
             </FormControl>
-            <InputGroup
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb="20px">
+            <InputGroup display="flex" justifyContent="space-between" alignItems="center" mb="20px">
               <Button
                 _focus={{ outline: 'none' }}
                 _hover={{

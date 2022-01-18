@@ -11,7 +11,9 @@ const MyProfile = () => {
         w={{ base: '100%', md: '230px' }}>
         <SideBar />
       </Box>
-      <Box w="" border="1px solid black">My Profile</Box>
+      <Box w="" border="1px solid black">
+        My Profile
+      </Box>
     </Flex>
   );
 };

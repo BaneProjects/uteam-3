@@ -1,10 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@chakra-ui/react';
 import { AuthContext } from './UserContext';
 import { useContext } from 'react';
 
 const PageNotFound = () => {
-  const params = useParams();
   const navigate = useNavigate();
   const { isLoggedIn } = useContext(AuthContext);
 

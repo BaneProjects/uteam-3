@@ -24,5 +24,3 @@ export const register = async ({ name, email, password }) => {
     console.log('An error occurred:', error.response);
   }
 };
-
-

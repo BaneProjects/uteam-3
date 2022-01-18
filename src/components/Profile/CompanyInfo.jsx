@@ -11,7 +11,9 @@ const CompanyInfo = () => {
         w={{ base: '100%', md: '230px' }}>
         <SideBar />
       </Box>
-      <Box w="" border="1px solid black">CompanyInfo</Box>
+      <Box w="" border="1px solid black">
+        CompanyInfo
+      </Box>
     </Flex>
   );
 };

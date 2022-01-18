@@ -28,7 +28,7 @@ const Login = () => {
       email,
       password
     };
-    loginFunction(data)
+    loginFunction(data);
   };
   return (
     <Flex justifyContent="center" alignItems="center">
