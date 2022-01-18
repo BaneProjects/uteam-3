@@ -33,6 +33,7 @@ const AuthProvider = ({ children }) => {
       let authUser = await register(payload);
       if (authUser.data.user) {
         console.log('token', authUser.data.jwt);
+        setIsLoggedIn(true);
         setUser(authUser.data);
         localStorage.setItem('token', authUser.data.jwt);
         navigate('/my-profile');
