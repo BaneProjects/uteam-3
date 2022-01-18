@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { login, register } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
 import createAxios from '../services/http';
+import ProtectedRoute from './ProtectedRoute';
 
 const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
@@ -16,7 +17,7 @@ const AuthProvider = ({ children }) => {
         console.log(res);
         setIsLoggedIn(true);
         setUser(res.data);
-        navigate("/my-profile")
+        navigate(<ProtectedRoute />);
       })
       .catch((err) => {
         setUser(null);

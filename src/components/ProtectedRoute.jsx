@@ -4,7 +4,6 @@ import { useContext } from 'react';
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useContext(AuthContext);
-  console.log('test protected', isLoggedIn);
   return isLoggedIn ? children : <Navigate to="/" />;
 };
 

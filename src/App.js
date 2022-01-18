@@ -15,7 +15,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
-  console.log('u app test', isLoggedIn);
   return (
     <ChakraProvider>
       <Box backgroundColor="gray.200" width="100%" minH="100vh">
