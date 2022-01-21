@@ -1,7 +1,8 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { login, register } from '../services/auth';
 import { uploadUserPhoto } from '../services/upload';
-import { createUserProfile, getUserProfile, getUserInfo } from '../services/profile';
+import { createUserProfile, getUserProfile } from '../services/profile';
+import { getCompany, createCompany } from '../services/comapny';
 import { useNavigate } from 'react-router-dom';
 import createAxios from '../services/http';
 import ProtectedRoute from '../ProtectedRoute';
@@ -13,11 +14,11 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState();
   const [userPhoto, setUserPhoto] = useState();
+  const [companyName, setCompanyName] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
     createAxios
-      // .get('http://localhost:1337/api/users/me')
       .get('https://uteam-api-7nngy.ondigitalocean.app/api/users/me')
       .then((res) => {
         setUserName(res.data.username);
@@ -33,7 +34,6 @@ const AuthProvider = ({ children }) => {
       .catch((err) => {
         setUser(null);
         setIsLoggedIn(false);
-        // navigate('/');
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -48,9 +48,10 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('token', authUser.data.jwt);
         const userProfilePhoto = await uploadUserPhoto(formData);
         await createUserProfile(authUser.data.user.id, userProfilePhoto.data[0].id);
-        const userInfo = await getUserInfo();
-        const userProfile = await getUserProfile(userInfo.data.id);
+        const userProfile = await getUserProfile(authUser.data.id);
+        console.log('userProfile', userProfile);
         setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
+        await createCompany(authUser.data.user.id, authUser.data.user.username + "'s companies");
         navigate('/my-profile');
       }
     } catch (error) {
@@ -71,6 +72,7 @@ const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setUser(authUser);
         navigate('/my-profile');
+        console.log('ovov', authUser.data.user.username + "'s companies");
       } else {
         console.log('failed login');
         navigate('/');

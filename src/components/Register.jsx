@@ -30,7 +30,6 @@ const Register = () => {
     const formData = new FormData();
     formData.append('files', files[0]);
     await registerFunction(user, formData);
-    // console.log("test register", JSON.stringify(user));
   };
   return (
     <Flex justifyContent="center" alignItems="center">

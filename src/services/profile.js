@@ -28,13 +28,3 @@ export const getUserProfile = async (userId) => {
     console.log('An error occurred:', error.response);
   }
 };
-
-export const getUserInfo = async () => {
-  try {
-    const response = await createAxios.get(`/api/users/me`);
-    console.log('getUserInfo', response);
-    return response;
-  } catch (error) {
-    console.log('An error occurred:', error.response);
-  }
-};

@@ -34,10 +34,8 @@ const Nav = () => {
             <Img
               src={`https://uteam-api-7nngy.ondigitalocean.app${userPhoto}`}
               w="50px"
-              mr='10px'
+              mr="10px"
               borderRadius="50%"
-              alignItems=""
-              marginBottom={{ base: '20px', sm: '0' }}
               alt="logo"
             />
           )}
@@ -46,16 +44,16 @@ const Nav = () => {
           <Menu>
             <MenuButton>{user && userName}</MenuButton>
             <MenuList>
-              <MenuItem color="black">{user && <Link to={'/my-profile'}>Profile</Link>}</MenuItem>
+              <MenuItem color="black">{user && <Link  to={'/my-profile'}><Box w="200px">Profile</Box></Link>}</MenuItem>
               <MenuItem color="black">
                 {user && (
                   <Link to={'/'}>
-                    <Text
+                    <Box w="200px"
                       onClick={() => {
                         logoutFunction(null);
                       }}>
                       Logout
-                    </Text>
+                    </Box>
                   </Link>
                 )}
               </MenuItem>
@@ -63,7 +61,6 @@ const Nav = () => {
           </Menu>
         </Box>
       </Flex>
-
       <Box display="flex">
         {!user && (
           <Link to={'/'}>
