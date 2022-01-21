@@ -3,7 +3,6 @@ import {
   Input,
   Button,
   FormControl,
-  FormLabel,
   Box,
   chakra,
   Text,
@@ -25,11 +24,13 @@ const Register = () => {
   const { register, handleSubmit } = useForm();
   const { registerFunction } = useAuthContext();
   const filePicker = useRef(null);
-  const [file, setFile] = useState();
+  const [files, setFiles] = useState();
 
   const onSubmit = async (user) => {
+    const formData = new FormData();
+    formData.append('files', files[0]);
+    await registerFunction(user, formData);
     // console.log("test register", JSON.stringify(user));
-    await registerFunction(user);
   };
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -95,13 +96,13 @@ const Register = () => {
                 Choose Photo
               </Button>
               <Text htmlFor="file-upload" fontSize="12px" color="black.200">
-                {file ? file[0].name : 'No file chosen'}
+                {files ? files[0].name : 'No file chosen'}
               </Text>
               <Input
                 type="file"
                 ref={filePicker}
                 display="none"
-                onChange={(e) => setFile(e.target.files)}
+                onChange={(e) => setFiles(e.target.files)}
               />
             </InputGroup>
             <Flex justifyContent="space-between" alignItems="center">

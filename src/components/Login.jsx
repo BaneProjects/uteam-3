@@ -20,7 +20,7 @@ const CFiLock = chakra(FiLock);
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loginFunction, isLoggedIn } = useAuthContext();
+  const { loginFunction } = useAuthContext();
 
   const handleLogIn = (e) => {
     e.preventDefault();
