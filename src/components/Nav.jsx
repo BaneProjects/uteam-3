@@ -27,8 +27,8 @@ const Nav = () => {
       w="100vw"
       maxWidth="100%"
       flexDirection={{ base: 'column', sm: 'row' }}>
-      <Img src={logo} w="220px" marginBottom={{ base: '20px', sm: '0' }} alt="logo" />
-      <Flex justifyContent="flex-end" alignItems="center" flexBasis={'70%'}>
+      <Img src={logo} w="220px" mb={{ base: '20px', sm: '0' }} alt="logo" />
+      <Flex justifyContent="flex-end" alignItems="center">
         <Box>
           {userPhoto && (
             <Img
@@ -43,12 +43,19 @@ const Nav = () => {
         <Box position="relative">
           <Menu>
             <MenuButton>{user && userName}</MenuButton>
-            <MenuList>
-              <MenuItem color="black">{user && <Link  to={'/my-profile'}><Box w="200px">Profile</Box></Link>}</MenuItem>
+            <MenuList mt="7px">
+              <MenuItem color="black">
+                {user && (
+                  <Link to={'/my-profile'}>
+                    <Box w="200px">Profile</Box>
+                  </Link>
+                )}
+              </MenuItem>
               <MenuItem color="black">
                 {user && (
                   <Link to={'/'}>
-                    <Box w="200px"
+                    <Box
+                      w="200px"
                       onClick={() => {
                         logoutFunction(null);
                       }}>
@@ -60,8 +67,6 @@ const Nav = () => {
             </MenuList>
           </Menu>
         </Box>
-      </Flex>
-      <Box display="flex">
         {!user && (
           <Link to={'/'}>
             <Button
@@ -87,7 +92,7 @@ const Nav = () => {
             </Button>
           </Link>
         )}
-      </Box>
+      </Flex>
     </Flex>
   );
 };
