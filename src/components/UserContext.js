@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { login, register } from '../services/auth';
 import { uploadUserPhoto } from '../services/upload';
 import { createUserProfile, getUserProfile } from '../services/profile';
-import { getCompany, createCompany } from '../services/comapny';
+import { createCompany} from '../services/comapny';
 import { useNavigate } from 'react-router-dom';
 import createAxios from '../services/http';
 import ProtectedRoute from '../ProtectedRoute';
@@ -14,7 +14,6 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState();
   const [userPhoto, setUserPhoto] = useState();
-  const [companyName, setCompanyName] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,12 +45,13 @@ const AuthProvider = ({ children }) => {
         setUser(authUser.data);
         setUserName(authUser.data.user.username);
         localStorage.setItem('token', authUser.data.jwt);
+        const companyN =  await createCompany(payload.company)
+        console.log('nova', companyN)
         const userProfilePhoto = await uploadUserPhoto(formData);
         await createUserProfile(authUser.data.user.id, userProfilePhoto.data[0].id);
         const userProfile = await getUserProfile(authUser.data.id);
         console.log('userProfile', userProfile);
         setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
-        await createCompany(authUser.data.user.id, authUser.data.user.username + "'s companies");
         navigate('/my-profile');
       }
     } catch (error) {

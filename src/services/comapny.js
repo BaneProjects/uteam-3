@@ -1,12 +1,11 @@
 import createAxios from './http';
 
 
-export const createCompany = async (userId, companyName) => {
+export const createCompany = async (companyName) => {
     try {
       const response = await createAxios.post('/api/companies', {
         data: {
-          user: userId,
-          name: companyName
+          name: companyName,
         }
       });
       return response;
