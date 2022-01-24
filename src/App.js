@@ -14,16 +14,18 @@ import Questions from './components/Profile/Questions';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn} = useContext(AuthContext);
+
+  //console.log('ApiEnv',process.env.REACT_APP_API_URL);
   return (
     <ChakraProvider>
       <Box backgroundColor="gray.200" width="100%" minH="100vh">
         <Nav />
         <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh">
           <Routes>
-            <Route path="/" element={isLoggedIn ? <PageNotFound /> : <Login />} />
-            <Route path="/register" element={isLoggedIn ? <PageNotFound /> : <Register />} />
-            <Route path="/:pageName" element={<PageNotFound />} />
+            <Route path="/" element={isLoggedIn ? <MyProfile /> : <Login />} />
+            <Route path="/register" element={isLoggedIn ? <MyProfile /> : <Register />} />
+            <Route path="/:pageName" element={<PageNotFound />}/>
             <Route
               path="/my-profile"
               element={

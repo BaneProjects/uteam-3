@@ -10,12 +10,12 @@ import {
   MenuItem,
   Text
 } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from './UserContext';
 import logo from '../assets/logo.png';
 
 const Nav = () => {
-  const { user, logoutFunction, userPhoto, userName } = useContext(AuthContext);
+  const { user, logoutFunction, userPhoto, username } = useContext(AuthContext);
 
   return (
     <Flex
@@ -27,46 +27,44 @@ const Nav = () => {
       w="100vw"
       maxWidth="100%"
       flexDirection={{ base: 'column', sm: 'row' }}>
-      <Img src={logo} w="220px" mb={{ base: '20px', sm: '0' }} alt="logo" />
-      <Flex justifyContent="flex-end" alignItems="center">
+      <Img src={logo} w="220px" marginBottom={{ base: '20px', sm: '0' }} alt="logo" />
+      <Flex justifyContent="flex-end" alignItems="center" flexBasis={'70%'}>
         <Box>
           {userPhoto && (
             <Img
               src={`https://uteam-api-7nngy.ondigitalocean.app${userPhoto}`}
               w="50px"
-              mr="10px"
+              mr={'10px'}
               borderRadius="50%"
+              alignItems=""
+              marginBottom={{ base: '20px', sm: '0' }}
               alt="logo"
             />
           )}
         </Box>
         <Box position="relative">
           <Menu>
-            <MenuButton>{user && userName}</MenuButton>
-            <MenuList mt="7px">
-              <MenuItem color="black">
-                {user && (
-                  <Link to={'/my-profile'}>
-                    <Box w="200px">Profile</Box>
-                  </Link>
-                )}
-              </MenuItem>
+            <MenuButton>{user && username}</MenuButton>
+            <MenuList>
+              <MenuItem color="black">{user && <Link to={'/my-profile'}>Profile</Link>}</MenuItem>
               <MenuItem color="black">
                 {user && (
                   <Link to={'/'}>
-                    <Box
-                      w="200px"
+                    <Text
                       onClick={() => {
                         logoutFunction(null);
                       }}>
                       Logout
-                    </Box>
+                    </Text>
                   </Link>
                 )}
               </MenuItem>
             </MenuList>
           </Menu>
         </Box>
+      </Flex>
+
+      <Box display="flex">
         {!user && (
           <Link to={'/'}>
             <Button
@@ -92,7 +90,7 @@ const Nav = () => {
             </Button>
           </Link>
         )}
-      </Flex>
+      </Box>
     </Flex>
   );
 };

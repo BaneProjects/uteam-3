@@ -1,7 +1,5 @@
 import createAxios from './http';
-
-
-export const createUserProfile = async (userId, photoId) => {
+export const createNewProfile = async (userId, photoId) => {
   try {
     const response = await createAxios.post('/api/profiles', {
       data: {
@@ -11,13 +9,13 @@ export const createUserProfile = async (userId, photoId) => {
     });
     return response;
   } catch (error) {
-    console.log('An error occurred:', error.response);
+    console.log(error);
   }
 };
 
-export const getUserProfile = async (userId) => {
+export const getProfile = async (userId) => {
   try {
-    const response = await createAxios.get('/api/profiles', {
+    const response = await createAxios.get('/api/profiles/', {
       params: {
         'filters[user][id][$eq]': userId,
         populate: 'profilePhoto'

@@ -21,15 +21,24 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { loginFunction } = useAuthContext();
-
+  const [error, setError] = useState(false);
   const handleLogIn = (e) => {
     e.preventDefault();
-    const data = {
-      email,
-      password
-    };
-    loginFunction(data);
+    if (email === '' || password === '') {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
+      return false;
+    } else {
+      const data = {
+        email,
+        password
+      };
+      loginFunction(data);
+    }
   };
+
   return (
     <Flex justifyContent="center" alignItems="center">
       <Box color="teal.400" textAlign="center" width={{ base: '300px', sm: '400px' }}>
@@ -83,6 +92,11 @@ const Login = () => {
               Login
             </Button>
           </Flex>
+          {error && (
+            <Text color="red" textAlign="center" mt="3" mb="3">
+              Invalid email or password
+            </Text>
+          )}
         </Box>
       </Box>
     </Flex>
