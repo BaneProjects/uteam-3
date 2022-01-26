@@ -3,7 +3,6 @@ import {
   Input,
   Button,
   FormControl,
-  FormLabel,
   Box,
   chakra,
   Text,
@@ -23,11 +22,28 @@ const Register = () => {
   const { register, handleSubmit } = useForm();
   const { registerFunction } = useAuthContext();
   const filePicker = useRef(null);
-  const [files, setFile] = useState();
+  const [files, setFile] = useState(null);
+  const [error, setRegistrationError] = useState(null);
+  const [errImg, setErrImg]=useState(null)
+  const [duplicateEmail, setDuplicateEmail]= useState(null)
+
   const onSubmit = async (user) => {
-    const formData = new FormData();
-    formData.append('files', files[0]);
-    await registerFunction(user, formData);
+    try {
+      
+      if (user.name === ""|| user.email === "" || user.company === "" || user.password === "" || files === null) {
+        setRegistrationError('You did not enter all the correct data');
+        return;
+      }else{
+        setRegistrationError(null)
+      }
+      
+      const formData = new FormData();
+      formData.append('files', files[0]);
+      const outcome = await registerFunction(user, formData);
+    }
+     catch (error) {
+      setDuplicateEmail(error)
+    }
   };
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -132,6 +148,16 @@ const Register = () => {
               </Button>
             </Flex>
           </form>
+          {error && (
+            <Text color="red" textAlign="center" mt="3" mb="3">
+              {error}
+            </Text>
+          )}
+           {
+             duplicateEmail && <Text color="red" textAlign="center" mt="3" mb="3">
+             {duplicateEmail}
+           </Text>
+           }
         </Box>
       </Box>
     </Flex>

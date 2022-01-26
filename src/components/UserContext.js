@@ -42,7 +42,6 @@ const AuthProvider = ({ children }) => {
         setUser(authUser.data);
         localStorage.setItem('token', authUser.data.jwt);
         let companyRes = await createCompany(payload.company);
-        console.log("blabla",companyRes)
         const photoResponse = await uploadUserPhoto(formData);
         await createNewProfile(
           authUser.data.user.id,
@@ -54,9 +53,11 @@ const AuthProvider = ({ children }) => {
         navigate('/my-profile');
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      throw error.response.data.error.message
     }
   };
+
   const loginFunction = async (payload) => {
     try {
       const authUser = await login(payload);

@@ -26,9 +26,6 @@ const Login = () => {
     e.preventDefault();
     if (email === '' || password === '') {
       setError(true);
-      setTimeout(() => {
-        setError(false);
-      }, 5000);
       return false;
     } else {
       const data = {
