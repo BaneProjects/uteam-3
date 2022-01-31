@@ -3,8 +3,7 @@ export const createCompany = async (company) => {
   try {
     const response = await createAxios.post('/api/companies', {
       data: {
-        name: `${company}'s Company`,
-      
+        name: `${company}'s Company`
       }
     });
     return response;
@@ -13,16 +12,14 @@ export const createCompany = async (company) => {
   }
 };
 
-
 export const getCompany = async (company) => {
   try {
-    const response= createAxios.get('/api/companies/' + company ,{
+    const response = createAxios.get('/api/companies/' + company, {
       params: {
-        populate:['logo']
-
-    }});
+        populate: ['logo']
+      }
+    });
     return response;
- 
   } catch (error) {
     console.log('An error occurred:', error.response);
   }

@@ -1,6 +1,5 @@
 import createAxios from './http';
 
-
 export const login = async ({ email, password }) => {
   try {
     const response = await createAxios.post('/api/auth/local', {
@@ -13,16 +12,10 @@ export const login = async ({ email, password }) => {
   }
 };
 
-
-export const register = async({ name, email, password }) => {
-    return  createAxios.post('/api/auth/local/register', {
-      username: name,
-      email: email,
-      password: password,
-    });
-   
+export const register = async ({ name, email, password }) => {
+  return createAxios.post('/api/auth/local/register', {
+    username: name,
+    email: email,
+    password: password
+  });
 };
-
-
-
-

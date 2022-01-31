@@ -3,7 +3,7 @@ import { login, register } from '../services/auth';
 import createAxios from '../services/http';
 import { useNavigate } from 'react-router-dom';
 import { getProfileById, createNewProfile } from '../services/profile';
-import { createCompany} from '../services/company';
+import { createCompany } from '../services/company';
 import { uploadUserPhoto } from '../services/upload';
 import ProtectedRoute from '../ProtectedRoute';
 const AuthContext = createContext();
@@ -13,8 +13,7 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userPhoto, setUserPhoto] = useState();
   const [username, setUserName] = useState();
-  
-    
+
   useEffect(() => {
     createAxios
       .get('https://uteam-api-7nngy.ondigitalocean.app/api/users/me')
@@ -23,9 +22,7 @@ const AuthProvider = ({ children }) => {
         setUserName(res.data.username);
         getProfileById(res.data.id).then((response) => {
           setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
-         
         });
-
         setIsLoggedIn(true);
         navigate(<ProtectedRoute />);
       })
@@ -48,16 +45,14 @@ const AuthProvider = ({ children }) => {
         let companyResponse = await createCompany(payload.company);
 
         const photoResponse = await uploadUserPhoto(formData);
-      
-         await createNewProfile(
+
+        await createNewProfile(
           authUser.data.user.id,
           photoResponse.data[0].id,
           companyResponse.data.data.id
         );
         const userProfile = await getProfileById(authUser.data.user.id);
         setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
-
-
         setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
       }
     } catch (error) {
@@ -105,7 +100,7 @@ const AuthProvider = ({ children }) => {
         registerFunction,
         isLoggedIn,
         userPhoto,
-        username,
+        username
       }}>
       {children}
     </AuthContext.Provider>

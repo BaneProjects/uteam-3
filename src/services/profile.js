@@ -14,15 +14,14 @@ export const createNewProfile = async (userId, photoId, companyId) => {
   }
 };
 
-
 export const getProfileById = async (userId) => {
   try {
-    const response = await createAxios.get(`/api/profiles/`,  {
+    const response = await createAxios.get(`/api/profiles/`, {
       params: {
         'filters[user][id][$eq]': userId,
-        populate:['profilePhoto','company']
-        
-    }});
+        populate: ['profilePhoto', 'company']
+      }
+    });
     return response;
   } catch (error) {
     console.log('An error occurred:', error.response);
