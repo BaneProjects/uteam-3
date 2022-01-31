@@ -7,7 +7,6 @@ const PageNotFound = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-
   const goHome = () => {
     navigate('/');
   };

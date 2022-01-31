@@ -42,10 +42,8 @@ const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setUser(authUser.data);
         localStorage.setItem('token', authUser.data.jwt);
-        let companyResponse = await createCompany(payload.company);
-
+        const companyResponse = await createCompany(payload.company);
         const photoResponse = await uploadUserPhoto(formData);
-
         await createNewProfile(
           authUser.data.user.id,
           photoResponse.data[0].id,
