@@ -44,7 +44,8 @@ const MyProfile = () => {
       <Box w="100%">
         <Flex
           minHeight="10vh"
-          justifyContent="center"
+          justifyContent={{ base: 'center', md: 'flex-start' }}
+          pl={{base: "0", md:"20px"}}
           alignItems="center"
           borderBottom="1px solid #43b3ac">
           <Text fontSize="28px">My Profile</Text>
