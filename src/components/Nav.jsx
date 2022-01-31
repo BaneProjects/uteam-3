@@ -36,8 +36,6 @@ const Nav = () => {
               w="50px"
               mr="10px"
               borderRadius="50%"
-              alignItems=""
-              marginBottom="15px"
               alt="logo"
             />
           )}
@@ -45,7 +43,7 @@ const Nav = () => {
         <Box>
           <Menu>
             <MenuButton>{user && username}</MenuButton>
-            <MenuList>
+            <MenuList mt="10px">
               <MenuItem color="black">
                 {user && (
                   <Link to={'/my-profile'}>

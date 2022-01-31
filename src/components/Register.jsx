@@ -15,34 +15,52 @@ import { HiOutlineMail, HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { useForm } from 'react-hook-form';
 import { useAuthContext } from './UserContext';
 import { useRef, useState } from 'react';
+
 const CFiUser = chakra(FiUser);
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
+
 const Register = () => {
   const { register, handleSubmit } = useForm();
   const { registerFunction } = useAuthContext();
   const filePicker = useRef(null);
   const [files, setFile] = useState(null);
   const [error, setRegistrationError] = useState(null);
-  const [errImg, setErrImg]=useState(null)
-  const [duplicateEmail, setDuplicateEmail]= useState(null)
+  const [duplicateEmail, setDuplicateEmail] = useState(null);
 
   const onSubmit = async (user) => {
     try {
-      
-      if (user.name === ""|| user.email === "" || user.company === "" || user.password === "" || files === null) {
+      if (!user.name || !user.email || !user.company || !user.password || files === null) {
         setRegistrationError('You did not enter all the correct data');
         return;
-      }else{
-        setRegistrationError(null)
+      } else {
+        setRegistrationError(null);
       }
-      
+
+      if (
+        typeof user.name === 'string' ||
+        typeof user.email === 'string' ||
+        typeof user.company === 'string' ||
+        typeof user.password === 'string'
+      ) {
+        setRegistrationError(null);
+      } else {
+        setRegistrationError('You did not enter all the correct data');
+        return;
+      }
+
+      if (user.password.length < 6) {
+        setRegistrationError('Password must have at least 6 characters');
+        return;
+      } else {
+        setRegistrationError(null);
+      }
+
       const formData = new FormData();
       formData.append('files', files[0]);
-      const outcome = await registerFunction(user, formData);
-    }
-     catch (error) {
-      setDuplicateEmail(error)
+      await registerFunction(user, formData);
+    } catch (error) {
+      setDuplicateEmail(error);
     }
   };
   return (
@@ -106,31 +124,42 @@ const Register = () => {
                 />
               </InputGroup>
             </FormControl>
-            <InputGroup display="flex" justifyContent="space-between" alignItems="center" mb="20px">
-              <Button
-                _focus={{ outline: 'none' }}
-                _hover={{
-                  background: 'teal.600'
-                }}
-                color="white"
-                bg="teal.400"
-                borderRadius="10px"
-                onClick={() => {
-                  filePicker.current.click();
-                }}>
-                {' '}
-                Choose Photo
-              </Button>
-              <Text htmlFor="file-upload" fontSize="12px" color="black.200">
-                {files ? files[0].name : 'No file chosen'}
+            <FormControl mb="20px">
+              <Text textAlign="left" mb="2.5px">
+                Profile Photo
               </Text>
-              <Input
-                type="file"
-                ref={filePicker}
-                display="none"
-                onChange={(e) => setFile(e.target.files)}
-              />
-            </InputGroup>
+              <InputGroup
+                border="1px solid #e2e8f0"
+                borderRadius="5px"
+                p="2px 5px 2px 2px"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center">
+                <Button
+                  _focus={{ outline: 'none' }}
+                  _hover={{
+                    background: 'teal.600'
+                  }}
+                  color="white"
+                  bg="teal.400"
+                  borderRadius="5px"
+                  onClick={() => {
+                    filePicker.current.click();
+                  }}>
+                  {' '}
+                  Choose Photo
+                </Button>
+                <Text htmlFor="file-upload" fontSize="12px" color="black.200">
+                  {files ? files[0].name : 'No file chosen'}
+                </Text>
+                <Input
+                  type="file"
+                  ref={filePicker}
+                  display="none"
+                  onChange={(e) => setFile(e.target.files)}
+                />
+              </InputGroup>
+            </FormControl>
             <Flex justifyContent="space-between" alignItems="center">
               <Link to={'/'}>
                 <Text _hover={{ color: 'teal.600' }}>Already have an account?</Text>
@@ -149,15 +178,15 @@ const Register = () => {
             </Flex>
           </form>
           {error && (
-            <Text color="red" textAlign="center" mt="3" mb="3">
+            <Text color="red" textAlign="center" m="20px">
               {error}
             </Text>
           )}
-           {
-             duplicateEmail && <Text color="red" textAlign="center" mt="3" mb="3">
-             {duplicateEmail}
-           </Text>
-           }
+          {duplicateEmail && (
+            <Text color="red" textAlign="center" m="20px">
+              {duplicateEmail}
+            </Text>
+          )}
         </Box>
       </Box>
     </Flex>
