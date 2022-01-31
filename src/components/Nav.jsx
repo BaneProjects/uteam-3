@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { HiLogout, HiOutlineUser } from 'react-icons/hi';
+
 import {
   Box,
   Flex,
@@ -28,7 +30,7 @@ const Nav = () => {
       maxWidth="100%"
       flexDirection={{ base: 'column', sm: 'row' }}>
       <Img src={logo} w="220px" marginBottom={{ base: '20px', sm: '0' }} alt="logo" />
-      <Flex justifyContent="flex-end" alignItems="center" flexBasis={'70%'}>
+      <Flex justifyContent="flex-end" alignItems="center">
         <Box>
           {userPhoto && (
             <Img
@@ -42,30 +44,38 @@ const Nav = () => {
             />
           )}
         </Box>
-        <Box position="relative">
+        <Box>
           <Menu>
             <MenuButton>{user && username}</MenuButton>
+
             <MenuList>
-              <MenuItem color="black">{user && <Link to={'/my-profile'}>Profile</Link>}</MenuItem>
-              <MenuItem color="black">
-                {user && (
-                  <Link to={'/'}>
-                    <Text
+              {user && (
+                <Link to={'/my-profile'}>
+                  <Box>
+                    <MenuItem color="black"  borderBottom={'1px'}>
+                      <Text marginRight={'0.5rem'}>Profile</Text>
+
+                      <HiOutlineUser />
+                    </MenuItem>
+                    <MenuItem
+                      color="black"
                       onClick={() => {
                         logoutFunction(null);
                       }}>
-                      Logout
-                    </Text>
-                  </Link>
-                )}
-              </MenuItem>
+                      <Text marginRight={'0.5rem'}>Logout</Text>
+
+                      <HiLogout />
+                    </MenuItem>
+                  </Box>
+                </Link>
+              )}
             </MenuList>
           </Menu>
         </Box>
       </Flex>
-
+      {!user && (
       <Box display="flex">
-        {!user && (
+    
           <Link to={'/'}>
             <Button
               borderRadius="10px"
@@ -77,7 +87,7 @@ const Nav = () => {
               Login
             </Button>
           </Link>
-        )}
+        
         {!user && (
           <Link to={'/register'}>
             <Button
@@ -91,6 +101,7 @@ const Nav = () => {
           </Link>
         )}
       </Box>
+      )}
     </Flex>
   );
 };
