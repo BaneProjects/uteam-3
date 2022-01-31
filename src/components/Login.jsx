@@ -12,19 +12,36 @@ import {
 import { Link } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
-import { useState, useContext } from 'react';
-import { AuthContext } from './UserContext';
-
+import { useState } from 'react';
+import { useAuthContext } from './UserContext';
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const { loginFunction } = useAuthContext();
+  const [error, setError] = useState(false);
+  const handleLogIn = (e) => {
+    e.preventDefault();
+    if (email === '' || password === '') {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
+      return false;
+    } else {
+      const data = {
+        email,
+        password
+      };
+      loginFunction(data);
+    }
+  };
+
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box color="teal.400" textAlign="center" width={['300px', '400px']}>
+      <Box color="teal.400" textAlign="center" width={{ base: '300px', sm: '400px' }}>
         <Text fontSize="24px" fontWeight="bold">
           uTeam - Login
         </Text>
@@ -63,20 +80,23 @@ const Login = () => {
             <Link to={'/register'}>
               <Text _hover={{ color: 'teal.600' }}>Don’t have an account?</Text>
             </Link>
-            <Link to={'/profile'}>
-              <Button
-                onClick={() => login(email, password)}
-                color="white"
-                borderRadius="10px"
-                bg="teal.400"
-                p="3px 20px"
-                ml="10px"
-                _hover={{ bg: 'teal.600' }}
-                _focus={{ outline: 'none' }}>
-                Login
-              </Button>
-            </Link>
+            <Button
+              onClick={handleLogIn}
+              color="white"
+              borderRadius="10px"
+              bg="teal.400"
+              p="3px 20px"
+              ml="10px"
+              _hover={{ bg: 'teal.600' }}
+              _focus={{ outline: 'none' }}>
+              Login
+            </Button>
           </Flex>
+          {error && (
+            <Text color="red" textAlign="center" mt="3" mb="3">
+              Invalid email or password
+            </Text>
+          )}
         </Box>
       </Box>
     </Flex>
