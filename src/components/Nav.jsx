@@ -13,6 +13,7 @@ import {
 import { useContext } from 'react';
 import { AuthContext } from './UserContext';
 import logo from '../assets/logo.png';
+import { HiLogout, HiOutlineUser } from 'react-icons/hi';
 const Nav = () => {
   const { user, logoutFunction, userPhoto, username } = useContext(AuthContext);
   return (
@@ -45,19 +46,25 @@ const Nav = () => {
               <MenuItem color="black">
                 {user && (
                   <Link to={'/my-profile'}>
-                    <Box w="195px">Profile</Box>
+                    <Box display="flex" alignItems="center">
+                      <Box w="195px">Profile</Box>
+                      <HiOutlineUser />
+                    </Box>
                   </Link>
                 )}
               </MenuItem>
               <MenuItem color="black">
                 {user && (
                   <Link to={'/'}>
-                    <Box
-                      w="195px"
-                      onClick={() => {
-                        logoutFunction(null);
-                      }}>
-                      Logout
+                    <Box display="flex" alignItems="center">
+                      <Box
+                        w="195px"
+                        onClick={() => {
+                          logoutFunction(null);
+                        }}>
+                        Logout
+                      </Box>
+                      <HiLogout />
                     </Box>
                   </Link>
                 )}

@@ -14,7 +14,7 @@ const CompanyInfo = () => {
   const [currCompany, setCompanyName] = useState('');
   const [idCompany, setIdCompany] = useState('');
   const [companyLogo, setCompanyLogo] = useState(null);
-
+  
   useEffect(() => {
     if (isLoggedIn) {
       // if the user is logged in, send request and set idCompany and CompanyName

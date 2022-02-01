@@ -20,7 +20,7 @@ function App() {
     <ChakraProvider>
       <Box backgroundColor="gray.200" width="100%" minHeight={'100vh'}>
         <Nav />
-        <Box minHeight="100vha" display="flex" alignItems="center" justifyContent="center">
+        <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center">
           <Routes>
             <Route path="/" element={isLoggedIn ? <MyProfile /> : <Login />} />
             <Route path="/register" element={isLoggedIn ? <MyProfile /> : <Register />} />
