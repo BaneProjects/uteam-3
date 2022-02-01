@@ -11,6 +11,7 @@ import PendingForApproval from './components/Profile/PendingForApproval';
 import CompanyInfo from './components/Profile/CompanyInfo';
 import Team from './components/Profile/Team';
 import Questions from './components/Profile/Questions';
+import AddNewQuestion from './components/Profile/AddNewQuestion';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
@@ -54,6 +55,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Questions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-new-question"
+              element={
+                <ProtectedRoute>
+                  <AddNewQuestion />
                 </ProtectedRoute>
               }
             />
