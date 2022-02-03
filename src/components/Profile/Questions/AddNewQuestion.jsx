@@ -16,8 +16,6 @@ const AddNewQuestion = () => {
   const functionForOrder = () => {
     return (Math.random() * 1000000).toFixed();
   };
-  // const allQuestionOrders = allQuestions.map((questions) => questions.attributes.order + ' ');
-  // console.log(allQuestionOrders);
 
   const saveAddNewQuestion = async (e) => {
     e.preventDefault();
@@ -27,8 +25,7 @@ const AddNewQuestion = () => {
       order: functionForOrder()
     };
     try {
-      const addedQuestion = await addNewQuestion(valueQuestion);
-      // functionForGetQuestion();
+      await addNewQuestion(valueQuestion);
     } catch (error) {
       console.log(error);
     }
@@ -111,10 +108,12 @@ const AddNewQuestion = () => {
                   Question type
                 </Text>
                 <Select
+                  variant="outline"
                   defaultValue={options[0].value}
                   value={option}
                   options={options}
                   onChange={(value) => setOption(value)}
+                  
                 />
               </FormControl>
               <Button

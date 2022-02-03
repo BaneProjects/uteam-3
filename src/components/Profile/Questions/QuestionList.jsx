@@ -5,17 +5,14 @@ import { useState, useEffect } from 'react';
 
 const QuestionList = () => {
   const [allQuestions, setAllQuestions] = useState([]);
-  
-  const functionForGetQuestion = async () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
     try {
       const getAllQuestions = await getQuestions();
       setAllQuestions(getAllQuestions.data);
     } catch (error) {
       return;
     }
-  };
-  useEffect(() => {
-    functionForGetQuestion();
   }, []);
 
   return (
