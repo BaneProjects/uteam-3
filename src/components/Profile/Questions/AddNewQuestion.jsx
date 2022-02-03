@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Select from 'react-select';
 import { addNewQuestion } from '../../../services/questions';
-import { useQuestionContext } from './QuestionContextProvider';
 
 const AddNewQuestion = () => {
-  const { allQuestions, functionForGetQuestion } = useQuestionContext();
   const [newQuestion, setNewQuestion] = useState();
   const [option, setOption] = useState({ label: 'Text', value: 'text' });
   const options = [
@@ -18,8 +16,8 @@ const AddNewQuestion = () => {
   const functionForOrder = () => {
     return (Math.random() * 1000000).toFixed();
   };
-  const allQuestionOrders = allQuestions.map((questions) => questions.attributes.order + ' ');
-  console.log(allQuestionOrders);
+  // const allQuestionOrders = allQuestions.map((questions) => questions.attributes.order + ' ');
+  // console.log(allQuestionOrders);
 
   const saveAddNewQuestion = async (e) => {
     e.preventDefault();
@@ -30,7 +28,7 @@ const AddNewQuestion = () => {
     };
     try {
       const addedQuestion = await addNewQuestion(valueQuestion);
-      functionForGetQuestion();
+      // functionForGetQuestion();
     } catch (error) {
       console.log(error);
     }

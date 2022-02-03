@@ -1,9 +1,22 @@
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import { BiTrash, BiEdit } from 'react-icons/bi';
-import { useQuestionContext } from './QuestionContextProvider';
+import { getQuestions } from '../../../services/questions';
+import { useState, useEffect } from 'react';
 
 const QuestionList = () => {
-  const { allQuestions } = useQuestionContext();
+  const [allQuestions, setAllQuestions] = useState([]);
+  
+  const functionForGetQuestion = async () => {
+    try {
+      const getAllQuestions = await getQuestions();
+      setAllQuestions(getAllQuestions.data);
+    } catch (error) {
+      return;
+    }
+  };
+  useEffect(() => {
+    functionForGetQuestion();
+  }, []);
 
   return (
     <Flex flexDirection="column" p="10px">
