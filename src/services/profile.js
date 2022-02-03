@@ -49,7 +49,6 @@ export const changeName = async (name) => {
     );
     const responseGetName = await getName(responseUser.data.id);
     const idProfile = responseGetName.data.data[0].id;
-
     const response = await createAxios.put(`/api/profiles/${idProfile}`, {
       data: { name }
     });
@@ -72,7 +71,6 @@ export const changeProfilePhoto = async (photoId) => {
         profilePhoto: photoId
       }
     });
-
     return response;
   } catch (error) {
     console.log('An error occurred:', error.response);

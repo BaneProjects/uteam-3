@@ -10,8 +10,8 @@ import PageNotFound from './components/PageNotFound';
 import PendingForApproval from './components/Profile/PendingForApproval';
 import CompanyInfo from './components/Profile/CompanyInfo';
 import Team from './components/Profile/Team';
-import Questions from './components/Profile/Questions';
-import AddNewQuestion from './components/Profile/AddNewQuestion';
+import Questions from './components/Profile/Questions/Questions';
+import AddNewQuestion from './components/Profile/Questions/AddNewQuestion';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
@@ -59,7 +59,7 @@ function App() {
               }
             />
             <Route
-              path="/add-new-question"
+              path="/questions/new"
               element={
                 <ProtectedRoute>
                   <AddNewQuestion />

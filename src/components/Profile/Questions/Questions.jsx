@@ -1,6 +1,7 @@
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
-import SideBar from './SideBar';
+import SideBar from '../SideBar';
 import { Link } from 'react-router-dom';
+import QuestionList from './QuestionList';
 
 const Questions = () => {
   return (
@@ -16,12 +17,12 @@ const Questions = () => {
         <Flex
           minHeight="10vh"
           justifyContent="space-between"
-          p={{ base: '10px 0', sm: '0 20px' }}
+          p={{ base: '8px 0', sm: '0 20px' }}
           flexDirection={{ base: 'column', sm: 'row' }}
           alignItems="center"
           borderBottom="1px solid #43b3ac">
-          <Text fontSize={{ base: '22px', sm: '28px' }}>Add New Question</Text>
-          <Link to={'/questions'}>
+          <Text fontSize={{ base: '22px', sm: '28px' }}>Questions</Text>
+          <Link to={'/questions/new'}>
             <Button
               color="white"
               borderRadius="10px"
@@ -29,10 +30,11 @@ const Questions = () => {
               p="3px 20px"
               _hover={{ bg: 'teal.600' }}
               _focus={{ outline: 'none' }}>
-              BACK
+              + Add new question
             </Button>
           </Link>
         </Flex>
+        <QuestionList />
       </Box>
     </Flex>
   );
