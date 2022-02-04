@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Button, Input, Spinner } from '@chakra-ui/react';
+import { Flex, Box, Text, Button, Spinner } from '@chakra-ui/react';
 import SideBar from './SideBar';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import QuestionItem from './QuestionItem';
 import ReactDragListView from 'react-drag-listview';
 
 const Questions = () => {
-  const [questions, setQuestions] = useState([]); // takodje state za drag and drop
+  const [questions, setQuestions] = useState([]); // also state for drag and drop
   const [editingQuestionsInputs, setEditingQuestionsInputs] = useState([]); // here is values za for each input field of each question
   const [editingQuestionId, setEditingQuestionId] = useState(null); // data which question is in edit mode
   const [spinner, setSpinner] = useState(false);
@@ -17,7 +17,6 @@ const Questions = () => {
   const _handleChangeEditingQuestions = (e, id) => {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-
     setEditingQuestionsInputs({
       ...editingQuestionsInputs,
       [id]: value
@@ -41,7 +40,6 @@ const Questions = () => {
       }
     });
   };
-
   useEffect(() => {
     refresh();
   }, []);
@@ -54,7 +52,6 @@ const Questions = () => {
       refresh();
     });
   };
-
   const _handleSave = (id) => {
     // save edited question
     const dataForSubmit = editingQuestionsInputs[id];
@@ -77,16 +74,14 @@ const Questions = () => {
       window.alert('niste popunili polje!');
     }
   };
-
   const jsxSpinner = (
     <Flex justifyContent="center">
       <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
     </Flex>
   );
-
-  // ovo su podesavanja za ReactDragListView widget
-  const dndState = questions; // adaptirmo naziv da znam oda je questions takodje state za drag and drop
-  const setDndState = setQuestions; // adaptirmo naziv da znam oda je questions takodje state za drag and drop
+  // ReactDragListView widget settings
+  const dndState = questions; //adapt the name to know the ode's questions also state for drag and drop
+  const setDndState = setQuestions;
   const dragProps = {
     onDragEnd(fromIndex, toIndex) {
       const data = [...dndState];
@@ -94,8 +89,8 @@ const Questions = () => {
       data.splice(toIndex, 0, item);
       setDndState(data);
     },
-    nodeSelector: '.dnd-item', // ovo je selector za element koji se draguje
-    handleSelector: '.drag-me-area' // ovo je slektor za elemnt na kojem detektujemo dragovanje. mora da na njega bas stavimo kursor
+    nodeSelector: '.dnd-item', // selector for the element that is drag
+    handleSelector: '.drag-me-area' // selector for the element on which we detect drag.
   };
 
   return (
@@ -134,7 +129,6 @@ const Questions = () => {
           <ReactDragListView {...dragProps}>
             {questions.map((question) => {
               const id = question.id;
-              // const type = question.attributes.type;
               return (
                 <QuestionItem
                   key={id}

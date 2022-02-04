@@ -1,6 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Flex, Box, Text, Button, Input } from '@chakra-ui/react';
 import { CloseIcon, DeleteIcon, EditIcon, CheckIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
-import { useRef } from 'react';
 import { _sortQuestionsbyOrder } from '../../utils/sort-utils';
 
 const QuestionItem = (props) => {
@@ -18,9 +18,16 @@ const QuestionItem = (props) => {
 
   const inputRef = useRef();
 
+  useEffect(() => {
+    if (editingQuestionId === id) {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }
+  });
+
   return (
     <Flex
-      key={id}
       justifyContent="space-between"
       border="1px solid #43b3ac"
       m="10px"
@@ -37,8 +44,8 @@ const QuestionItem = (props) => {
         </Box>
 
         {editingQuestionId === id ? (
-          <Input 
-           marginLeft="20px"
+          <Input
+            marginLeft="20px"
             ref={inputRef}
             type="text"
             variant="unstyled"
