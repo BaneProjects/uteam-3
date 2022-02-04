@@ -12,7 +12,6 @@ import CompanyInfo from './components/Profile/CompanyInfo';
 import Team from './components/Profile/Team';
 import Questions from './components/Profile/Questions';
 import ProtectedRoute from './ProtectedRoute';
-
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
 

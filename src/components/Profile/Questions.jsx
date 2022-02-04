@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Button, Spinner } from '@chakra-ui/react';
+import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import SideBar from './SideBar';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -7,13 +7,12 @@ import createAxios from '../../services/http';
 import { _sortQuestionsbyOrder } from '../../utils/sort-utils';
 import QuestionItem from './QuestionItem';
 import ReactDragListView from 'react-drag-listview';
-
+import { Spiner } from './Spiner';
 const Questions = () => {
   const [questions, setQuestions] = useState([]); // also state for drag and drop
   const [editingQuestionsInputs, setEditingQuestionsInputs] = useState([]); // here is values za for each input field of each question
   const [editingQuestionId, setEditingQuestionId] = useState(null); // data which question is in edit mode
   const [spinner, setSpinner] = useState(false);
-
   const _handleChangeEditingQuestions = (e, id) => {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -52,6 +51,7 @@ const Questions = () => {
       refresh();
     });
   };
+  
   const _handleSave = (id) => {
     // save edited question
     const dataForSubmit = editingQuestionsInputs[id];
@@ -66,7 +66,7 @@ const Questions = () => {
       setSpinner(true);
       createAxios.put('api/questions/' + id, { data: { text: dataForSubmit } }).then((res) => {
         console.log('api edit question respose', res);
-
+    
         refresh(); // to fetch the question again and see the changes from the database
         setEditingQuestionId(null); //to return from edit mode to normal mode
       });
@@ -74,11 +74,7 @@ const Questions = () => {
       window.alert('niste popunili polje!');
     }
   };
-  const jsxSpinner = (
-    <Flex justifyContent="center">
-      <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
-    </Flex>
-  );
+  
   // ReactDragListView widget settings
   const dndState = questions; //adapt the name to know the ode's questions also state for drag and drop
   const setDndState = setQuestions;
@@ -125,12 +121,17 @@ const Questions = () => {
             </Link>
           </Flex>
 
-          {spinner && jsxSpinner}
+          {spinner && <Spiner/>}
           <ReactDragListView {...dragProps}>
-            {questions.map((question) => {
+            
+            {
+            
+            questions.map((question, serialNum) => {
+              const counter= serialNum +1;
               const id = question.id;
               return (
-                <QuestionItem
+                <QuestionItem 
+                  counter={counter}
                   key={id}
                   question={question}
                   editingQuestionId={editingQuestionId}
@@ -141,7 +142,10 @@ const Questions = () => {
                   _handleDelete={_handleDelete}
                 />
               );
-            })}
+            
+            })
+            }
+
           </ReactDragListView>
         </Box>
       </Flex>

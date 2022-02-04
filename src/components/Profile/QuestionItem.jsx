@@ -8,6 +8,7 @@ const QuestionItem = (props) => {
   const id = question.id;
   const type = question.attributes.type;
   const {
+    counter,
     editingQuestionId,
     editingQuestionsInputs,
     _handleChangeEditingQuestions,
@@ -15,7 +16,8 @@ const QuestionItem = (props) => {
     _handleSave,
     _handleDelete
   } = props;
-
+  //console.log("editingQuestionId", editingQuestionId)
+  
   const inputRef = useRef();
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const QuestionItem = (props) => {
         <Box fontWeight="500">
           {' '}
           <ArrowUpDownIcon cursor="pointer" className="drag-me-area" /> Quetion{' '}
-          {question.attributes.order} - {type}
+          {counter} - {type}
         </Box>
 
         {editingQuestionId === id ? (
@@ -58,7 +60,7 @@ const QuestionItem = (props) => {
           <Text marginLeft="20px">{question.attributes.text}</Text>
         )}
       </Flex>
-
+ 
       <Flex alignItems="center">
         {editingQuestionId === id && (
           <>
