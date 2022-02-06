@@ -24,3 +24,10 @@ export const getQuestions = async () => {
   }
 };
 
+export const deleteQuestions = async (idQuestion) => {
+  try {
+    await createAxios.delete(`api/questions/${idQuestion}`);
+  } catch (error) {
+    console.log(error);
+  }
+};

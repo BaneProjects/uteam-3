@@ -1,36 +1,56 @@
-import { Flex, Input, Button, InputGroup, FormControl, Box, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  Input,
+  Button,
+  FormControl,
+  Box,
+  Text,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton
+} from '@chakra-ui/react';
 import SideBar from '../SideBar';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import Select from 'react-select';
-import { addNewQuestion } from '../../../services/questions';
+import { useState, useRef } from 'react';
+import { Select } from '@chakra-ui/react';
+import { addNewQuestion, getQuestions } from '../../../services/questions';
 
 const AddNewQuestion = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = useRef();
   const [newQuestion, setNewQuestion] = useState();
-  const [option, setOption] = useState({ label: 'Text', value: 'text' });
-  const options = [
-    { label: 'Text', value: 'text' },
-    { label: 'Long Text', value: 'long_text' },
-    { label: 'Image', value: 'image' }
-  ];
-  const functionForOrder = () => {
-    return (Math.random() * 1000000).toFixed();
-  };
+  const [questionError, setQuestionError] = useState();
+  const [option, setOption] = useState();
 
   const saveAddNewQuestion = async (e) => {
     e.preventDefault();
     const valueQuestion = {
       text: newQuestion,
-      type: option.value,
-      order: functionForOrder()
+      type: option,
+      order: Date.now()
     };
     try {
-      await addNewQuestion(valueQuestion);
+      if (
+        valueQuestion.text &&
+        (valueQuestion.type === 'text' ||
+          valueQuestion.type === 'image' ||
+          valueQuestion.type === 'long_text')
+      ) {
+        setQuestionError('');
+      } else {
+        setQuestionError('The fields must not be empty');
+      }
+      if (valueQuestion.text && valueQuestion.type) {
+        await addNewQuestion(valueQuestion);
+        onOpen();
+      }
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <Flex minHeight="100vh" w="100vw" flexDirection={{ base: 'column', md: 'row' }}>
       <Box
@@ -61,7 +81,11 @@ const AddNewQuestion = () => {
             </Button>
           </Link>
         </Flex>
-        <Box minH="90vh" display="flex" alignItems="center" justifyContent="center">
+        <Box
+          minH={{ base: '80vh', sm: '90vh' }}
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
           <Box
             bg="white"
             mt="20px"
@@ -75,47 +99,50 @@ const AddNewQuestion = () => {
             width={{ base: '300px', sm: '450px' }}>
             <Box p="0 30px 0 30px">
               <FormControl mb="20px">
-                {option.value === 'text' || option.value === 'long_text' ? (
-                  <Box>
-                    <Text textAlign="left" mb="2.5px">
-                      {option.value === 'text' ? 'Question text' : 'Question long text'}
-                    </Text>
-                    <Input
-                      color="black"
-                      onChange={(e) => setNewQuestion(e.target.value)}
-                      type={option.value === 'text' ? 'text' : 'long_text'}
-                      placeholder={option.value === 'text' ? 'Question text' : 'Question long text'}
-                      _focus={{ border: '1px solid #007C8C' }}
-                    />
-                  </Box>
-                ) : (
-                  <Box>
-                    <Text textAlign="left" mb="2.5px">
-                      Question image
-                    </Text>
-                    <Input
-                      color="black"
-                      onChange={(e) => setNewQuestion(e.target.value)}
-                      type="image"
-                      placeholder="Question Image"
-                      _focus={{ border: '1px solid #007C8C' }}
-                    />
-                  </Box>
-                )}
+                <Box>
+                  <Text textAlign="left" mb="2.5px">
+                    Question text
+                  </Text>
+                  <Input
+                    color="black"
+                    onChange={(e) => setNewQuestion(e.target.value)}
+                    type="text"
+                    placeholder="Question text"
+                    _focus={{ border: '1px solid #007C8C' }}
+                  />
+                </Box>
               </FormControl>
               <FormControl mb="20px">
                 <Text textAlign="left" mb="2.5px">
                   Question type
                 </Text>
                 <Select
-                  variant="outline"
-                  defaultValue={options[0].value}
-                  value={option}
-                  options={options}
-                  onChange={(value) => setOption(value)}
-                  
-                />
+                  // value={option}
+                  onChange={(e) => setOption(e.target.value)}
+                  _focus={{
+                    border: '1px solid #007C8C'
+                  }}>
+                  <option value="" selected disabled hidden>
+                    Select question type
+                  </option>
+                  <option value="text">Text</option>
+                  <option value="long_text">Long Text</option>
+                  <option value="image">Image</option>
+                </Select>
               </FormControl>
+              {questionError ? (
+                <Box color="red">{questionError}</Box>
+              ) : (
+                <Box>
+                  <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent width={{ base: '300px', sm: '400px' }} mt="200px">
+                      <ModalCloseButton />
+                      <ModalBody m="20px 0">You have successfully added a question!</ModalBody>
+                    </ModalContent>
+                  </Modal>
+                </Box>
+              )}
               <Button
                 onClick={saveAddNewQuestion}
                 color="white"
