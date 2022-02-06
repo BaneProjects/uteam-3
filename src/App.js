@@ -10,8 +10,9 @@ import PageNotFound from './components/PageNotFound';
 import PendingForApproval from './components/Profile/PendingForApproval';
 import CompanyInfo from './components/Profile/CompanyInfo';
 import Team from './components/Profile/Team';
-import Questions from './components/Profile/Questions';
+import Questions from './components/Profile/Questions/Questions';
 import ProtectedRoute from './ProtectedRoute';
+
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
 
@@ -19,7 +20,7 @@ function App() {
     <ChakraProvider>
       <Box backgroundColor="gray.200" width="100%" minHeight={'100vh'}>
         <Nav />
-        <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center">
+        <Box display="flex" alignItems="center" justifyContent="center">
           <Routes>
             <Route path="/" element={isLoggedIn ? <MyProfile /> : <Login />} />
             <Route path="/register" element={isLoggedIn ? <MyProfile /> : <Register />} />
@@ -56,6 +57,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/questions/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <Questions editMode />
+                </ProtectedRoute>
+              }
+            />
+             
             <Route
               path="/team"
               element={

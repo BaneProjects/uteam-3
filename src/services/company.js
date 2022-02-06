@@ -24,3 +24,26 @@ export const getCompany = async (company) => {
     console.log('An error occurred:', error.response);
   }
 };
+
+
+export const updateCompany = async (idCompany, data) => {
+  try {
+    const response = createAxios.put(
+      '/api/companies/' + idCompany,
+      {
+        data: {
+          ...data
+        }
+      },
+      {
+        params: {
+          populate: ['logo']
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log('An error occurred:', error.response);
+  }
+};
+

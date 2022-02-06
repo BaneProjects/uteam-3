@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { AuthContext } from '../UserContext';
 import { uploadUserPhoto } from '../../services/upload';
 import { getProfileById } from '../../services/profile';
-import createAxios from '../../services/http';
+import { updateCompany } from '../../services/company';
 const CompanyInfo = () => {
   const filePicker = useRef(null);
   const [files, setFile] = useState(null);
@@ -14,7 +14,7 @@ const CompanyInfo = () => {
   const [currCompany, setCompanyName] = useState('');
   const [idCompany, setIdCompany] = useState('');
   const [companyLogo, setCompanyLogo] = useState(null);
-  
+
   useEffect(() => {
     if (isLoggedIn) {
       // if the user is logged in, send request and set idCompany and CompanyName
@@ -42,19 +42,7 @@ const CompanyInfo = () => {
 
     // first send request for upload, after that send request for update Company with the data we received from the upload (specifically image id)
     const data = { name: currCompany, logo: uploaResponse.data[0].id };
-    const responseUpdate = await createAxios.put(
-      '/api/companies/' + idCompany,
-      {
-        data: {
-          ...data
-        }
-      },
-      {
-        params: {
-          populate: ['logo']
-        }
-      }
-    );
+    const responseUpdate = updateCompany(idCompany, data);
     setCompanyLogo(responseUpdate.data.data.attributes.logo.data.attributes.url);
     setCompanyName(responseUpdate.data.data.attributes.name);
   };
@@ -137,9 +125,7 @@ const CompanyInfo = () => {
         {companyLogo && (
           <Flex justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
             <Text marginBottom={'10px'}>Your company logo</Text>
-            <Img
-              src={`https://uteam-api-7nngy.ondigitalocean.app${companyLogo}`}
-              width={'200px'}></Img>
+            <Img src={process.env.REACT_APP_API_URL + companyLogo} width={'200px'}></Img>
           </Flex>
         )}
       </Box>

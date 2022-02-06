@@ -65,6 +65,8 @@ const AuthProvider = ({ children }) => {
 
       setUserName(authUser.data.user.username);
       getProfileById(authUser.data.user.id).then((response) => {
+        console.log('login', response);
+
         setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
       });
 
