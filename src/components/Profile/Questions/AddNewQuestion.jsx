@@ -14,9 +14,10 @@ import {
 } from '@chakra-ui/react';
 import SideBar from '../SideBar';
 import { Link } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import { Select } from '@chakra-ui/react';
 import { addNewQuestion, getQuestions } from '../../../services/questions';
+import { AuthContext } from '../../UserContext';
 
 const AddNewQuestion = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,14 +25,50 @@ const AddNewQuestion = () => {
   const [newQuestion, setNewQuestion] = useState();
   const [questionError, setQuestionError] = useState();
   const [option, setOption] = useState();
+  const { idCompany } = useContext(AuthContext);
+  const [allQuestions, setAllQuestions] = useState([]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    try {
+      const getAllQuestions = await getQuestions();
+      setAllQuestions(getAllQuestions.data);
+    } catch (error) {
+      return;
+    }
+  }, []);
+
+  const functionForOrder = () => {
+    const funForArray = async () => {
+      const getAllQuestions = await getQuestions();
+      setAllQuestions(getAllQuestions.data);
+    };
+    funForArray();
+    let array = [];
+    // eslint-disable-next-line array-callback-return
+    allQuestions.map((questions) => {
+      array.push({ order: questions.attributes.order });
+    });
+    let max = Math.max.apply(
+      Math,
+      array.map(function (o) {
+        return o.order;
+      })
+    );
+    if (max < 1) {
+      max = 0;
+    }
+    return max + 1;
+  };
   const saveAddNewQuestion = async (e) => {
     e.preventDefault();
     const valueQuestion = {
       text: newQuestion,
       type: option,
-      order: Date.now()
+      order: functionForOrder(),
+      company: idCompany
     };
+    console.log(valueQuestion);
     try {
       if (
         valueQuestion.text &&

@@ -1,6 +1,6 @@
 import createAxios from './http';
 
-export const createNewProfile = async (userId, photoId,companyId) => {
+export const createNewProfile = async (userId, photoId, companyId) => {
   try {
     const response = await createAxios.post('/api/profiles', {
       data: {
@@ -17,10 +17,10 @@ export const createNewProfile = async (userId, photoId,companyId) => {
 
 export const getProfileById = async (userId) => {
   try {
-    const response = await createAxios.get('/api/profiles/', {
+    const response = await createAxios.get(`/api/profiles/`, {
       params: {
         'filters[user][id][$eq]': userId,
-        populate: 'profilePhoto'
+        populate: ['profilePhoto', 'company']
       }
     });
     return response;

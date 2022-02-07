@@ -1,4 +1,5 @@
 import createAxios from './http';
+
 export const createCompany = async (company) => {
   try {
     const response = await createAxios.post('/api/companies', {

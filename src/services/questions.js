@@ -1,12 +1,13 @@
 import createAxios from './http';
 
-export const addNewQuestion = async ({ text, type, order }) => {
+export const addNewQuestion = async ({ text, type, order, company }) => {
   try {
     const response = await createAxios.post('/api/questions', {
       data: {
         text,
         type,
-        order
+        order,
+        company
       }
     });
     return response;

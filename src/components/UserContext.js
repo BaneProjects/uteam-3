@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
   const [userPhoto, setUserPhoto] = useState();
   const [username, setUserName] = useState();
   const [email, setEmail] = useState();
+  const [idCompany, setCompanyId] = useState();
 
   useEffect(() => {
     createAxios
@@ -34,6 +35,7 @@ const AuthProvider = ({ children }) => {
         getProfileById(res.data.id).then((response) => {
           setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
           console.log(response.data.data[0].attributes.profilePhoto.data.attributes.url);
+          setCompanyId(response.data.data[0].attributes.company.data.id);
         });
         setIsLoggedIn(true);
         navigate(<ProtectedRoute />);
@@ -83,6 +85,7 @@ const AuthProvider = ({ children }) => {
       });
       getProfileById(authUser.data.user.id).then((response) => {
         setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
+        setCompanyId(response.data.data[0].attributes.company.data.id);
       });
       localStorage.setItem('token', authUser.data.jwt);
       setIsLoggedIn(true);
@@ -140,7 +143,8 @@ const AuthProvider = ({ children }) => {
         isLoggedIn,
         userPhoto,
         username,
-        email
+        email,
+        idCompany
       }}>
       {children}
     </AuthContext.Provider>
