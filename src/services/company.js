@@ -25,7 +25,6 @@ export const getCompany = async (company) => {
   }
 };
 
-
 export const updateCompany = async (idCompany, data) => {
   try {
     const response = createAxios.put(
@@ -46,4 +45,3 @@ export const updateCompany = async (idCompany, data) => {
     console.log('An error occurred:', error.response);
   }
 };
-

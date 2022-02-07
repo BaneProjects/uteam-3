@@ -42,7 +42,7 @@ const CompanyInfo = () => {
 
     // first send request for upload, after that send request for update Company with the data we received from the upload (specifically image id)
     const data = { name: currCompany, logo: uploaResponse.data[0].id };
-    const responseUpdate = updateCompany(idCompany, data);
+    const responseUpdate = await updateCompany(idCompany, data);
     setCompanyLogo(responseUpdate.data.data.attributes.logo.data.attributes.url);
     setCompanyName(responseUpdate.data.data.attributes.name);
   };

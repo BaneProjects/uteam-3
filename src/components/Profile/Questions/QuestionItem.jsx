@@ -1,7 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
-import { _sortQuestionsbyOrder } from '../../../utils/sort-utils';
 import { useNavigate } from 'react-router-dom';
 
 const QuestionItem = (props) => {
@@ -9,17 +7,7 @@ const QuestionItem = (props) => {
   const question = props.question;
   const id = question.id;
   const type = question.attributes.type;
-  const { counter, editingQuestionId, setEditingQuestionId, handleDelete } = props;
-
-  const inputRef = useRef();
-
-  useEffect(() => {
-    if (editingQuestionId === id) {
-      if (inputRef && inputRef.current) {
-        inputRef.current.focus();
-      }
-    }
-  });
+  const { originalIndex, setEditingQuestionId, handleDelete } = props;
 
   return (
     <Flex
@@ -32,9 +20,9 @@ const QuestionItem = (props) => {
       boxShadow=" 1px 1px 0px black"
       className="drag-me-area dnd-item">
       <Flex w="100%" flexDirection="column">
-        <Box fontWeight="500">
-          {' '}
-          <ArrowUpDownIcon cursor="pointer" className="drag-me-area" /> Quetion {counter} - {type}
+        <Box fontWeight="500" className="drag-me-area">
+          <ArrowUpDownIcon cursor="pointer" className="drag-me-area" /> Question {originalIndex + 1}{' '}
+          - {type}
         </Box>
         <Text marginLeft="20px">{question.attributes.text}</Text>
       </Flex>

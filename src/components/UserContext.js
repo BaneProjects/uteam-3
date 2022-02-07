@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userPhoto, setUserPhoto] = useState();
   const [username, setUserName] = useState();
-
+  const [idCompany, setCompanyId] = useState();
   useEffect(() => {
     createAxios
       .get('https://uteam-api-7nngy.ondigitalocean.app/api/users/me')
@@ -21,6 +21,8 @@ const AuthProvider = ({ children }) => {
         setUser(res.data);
         setUserName(res.data.username);
         getProfileById(res.data.id).then((response) => {
+          console.log('response', response);
+          setCompanyId(response.data.data[0].attributes.company.data.id);
           setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
         });
         setIsLoggedIn(true);
@@ -60,13 +62,11 @@ const AuthProvider = ({ children }) => {
   const loginFunction = async (payload) => {
     try {
       const authUser = await login(payload);
-
       setUser(authUser.data.user);
-
       setUserName(authUser.data.user.username);
       getProfileById(authUser.data.user.id).then((response) => {
-        console.log('login', response);
-
+        console.log(response);
+        setCompanyId(response.data.data[0].attributes.company.data.id);
         setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
       });
 
@@ -100,7 +100,8 @@ const AuthProvider = ({ children }) => {
         registerFunction,
         isLoggedIn,
         userPhoto,
-        username
+        username,
+        idCompany
       }}>
       {children}
     </AuthContext.Provider>

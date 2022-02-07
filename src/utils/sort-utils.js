@@ -1,4 +1,4 @@
-export const _sortQuestionsbyOrder = (questions) => {
+export const sortQuestionsbyOrder = (questions) => {
   const sortirani = questions.sort((aquestion, bquestion) => {
     const a = aquestion.attributes.order;
     const b = bquestion.attributes.order;
@@ -8,7 +8,6 @@ export const _sortQuestionsbyOrder = (questions) => {
     if (a > b) {
       return 1;
     }
-    // a must be equal to b
     return 0;
   });
   return sortirani;

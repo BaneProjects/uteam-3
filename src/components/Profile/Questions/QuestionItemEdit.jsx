@@ -35,13 +35,9 @@ const QuestionItemEdit = (props) => {
       borderRadius="10px"
       p="10px"
       background="white"
-      boxShadow=" 1px 1px 0px black"
-      className="drag-me-area dnd-item">
+      boxShadow=" 1px 1px 0px black">
       <Flex w="100%" flexDirection="column">
-        <Box fontWeight="500">
-          Question
-          {type}
-        </Box>
+        <Box fontWeight="500">Question - {type}</Box>
         <Input
           marginLeft="20px"
           ref={inputRef}

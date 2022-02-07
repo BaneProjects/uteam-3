@@ -1,15 +1,16 @@
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import SideBar from '../SideBar';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import createAxios from '../../../services/http';
-import { _sortQuestionsbyOrder } from '../../../utils/sort-utils';
+import { sortQuestionsbyOrder } from '../../../utils/sort-utils';
 import QuestionItem from './QuestionItem';
 import ReactDragListView from 'react-drag-listview';
 import { Spiner } from './Spiner';
 import { getQuestions, DeleteQuestionById } from '../../../services/question';
 import QuestionItemEdit from './QuestionItemEdit';
+import { AuthContext } from '../../UserContext';
 
 const selectSingleQuestionById = (id, questions) => {
   let selected = false;
@@ -21,12 +22,27 @@ const selectSingleQuestionById = (id, questions) => {
   return selected;
 };
 
+const getOriginalIndexById = (id, questionsOriginal) => {
+  let selectedindex = false;
+  if (Array.isArray(questionsOriginal)) {
+    questionsOriginal.forEach((question, index) => {
+      if (question.id === id) {
+        selectedindex = index;
+      }
+    });
+  }
+  return selectedindex;
+};
+
 const Questions = (props) => {
+  const { idCompany } = useContext(AuthContext);
+
   const navigate = useNavigate();
   let { id } = useParams();
   id = parseInt(id);
   let editingQuestion = false;
   const [questions, setQuestions] = useState([]); // also state for drag and drop
+  const [questionsOriginal, setQuestionsOriginal] = useState([]); //state for original index
   let editMode = false;
   if (props.editMode === true) {
     editMode = true;
@@ -46,25 +62,29 @@ const Questions = (props) => {
 
   const refresh = () => {
     setSpinner(true);
-
-    getQuestions().then((res) => {
-      console.log('question', res);
-      setSpinner(false);
-      if (res && res.data && Array.isArray(res.data.data)) {
-        const sortiraniQuestions = _sortQuestionsbyOrder(res.data.data);
-        setQuestions(sortiraniQuestions);
-        // we are now filling in the inputs
-        let inputValues = {};
-        res.data.data.forEach((question) => {
-          inputValues[question.id] = question.attributes.text;
-        });
-        setEditingQuestionsInputs(inputValues);
-      }
-    });
+    if (idCompany) {
+      console.log('Branislav', idCompany);
+      getQuestions(idCompany).then((res) => {
+        console.log('question', res);
+        setSpinner(false);
+        if (res && res.data && Array.isArray(res.data.data)) {
+          const sortiraniQuestions = sortQuestionsbyOrder(res.data.data);
+          setQuestions(sortiraniQuestions);
+          setQuestionsOriginal(sortiraniQuestions);
+          // we are now filling in the inputs
+          let inputValues = {};
+          res.data.data.forEach((question) => {
+            inputValues[question.id] = question.attributes.text;
+          });
+          setEditingQuestionsInputs(inputValues);
+        }
+      });
+    }
   };
   useEffect(() => {
     refresh();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idCompany]);
 
   const _handleDelete = (id) => {
     if (id) {
@@ -176,13 +196,12 @@ const Questions = (props) => {
 
           {!editMode && (
             <ReactDragListView {...dragProps}>
-              {questions.map((question, serialNum) => {
-                const counter = serialNum + 1;
+              {questions.map((question) => {
                 const id = question.id;
                 return (
                   <QuestionItem
-                    counter={counter}
                     key={id}
+                    originalIndex={getOriginalIndexById(id, questionsOriginal)}
                     question={question}
                     editingQuestionId={editingQuestionId}
                     setEditingQuestionId={setEditingQuestionId}

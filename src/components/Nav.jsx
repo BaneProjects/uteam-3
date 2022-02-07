@@ -8,8 +8,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Text
 } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useContext } from 'react';
 import { AuthContext } from './UserContext';
 import logo from '../assets/logo.png';
@@ -31,7 +31,7 @@ const Nav = () => {
         <Box>
           {userPhoto && (
             <Img
-              src={`https://uteam-api-7nngy.ondigitalocean.app${userPhoto}`}
+              src={process.env.REACT_APP_API_URL + userPhoto}
               w="50px"
               mr="10px"
               borderRadius="50%"
@@ -41,7 +41,11 @@ const Nav = () => {
         </Box>
         <Box>
           <Menu>
-            <MenuButton>{user && username}</MenuButton>
+            <MenuButton>{user && username}
+          {
+           user && <ChevronDownIcon/>
+          } 
+            </MenuButton>
             <MenuList mt="10px">
               <MenuItem color="black">
                 {user && (
