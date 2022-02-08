@@ -44,9 +44,7 @@ export const getName = async (userId) => {
 
 export const changeName = async (name) => {
   try {
-    const responseUser = await createAxios.get(
-      'https://uteam-api-7nngy.ondigitalocean.app/api/users/me'
-    );
+    const responseUser = await createAxios.get('/api/users/me');
     const responseGetName = await getName(responseUser.data.id);
     const idProfile = responseGetName.data.data[0].id;
     const response = await createAxios.put(`/api/profiles/${idProfile}`, {
@@ -60,9 +58,7 @@ export const changeName = async (name) => {
 
 export const changeProfilePhoto = async (photoId) => {
   try {
-    const responseUser = await createAxios.get(
-      'https://uteam-api-7nngy.ondigitalocean.app/api/users/me'
-    );
+    const responseUser = await createAxios.get('/api/users/me');
     const responseGetName = await getName(responseUser.data.id);
     const idProfile = responseGetName.data.data[0].id;
 
