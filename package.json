@@ -13,6 +13,7 @@
     "axios": "^0.24.0",
     "chakra-react-select": "^3.0.3",
     "chakra-ui-file-picker": "^0.2.0",
+    "date-fns": "^2.28.0",
     "dotenv": "^14.2.0",
     "framer-motion": "^5.6.0",
     "jwt-decode": "^3.1.2",

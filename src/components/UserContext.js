@@ -6,10 +6,12 @@ import { login, register } from '../services/auth';
 import { getProfileById, createNewProfile } from '../services/profile';
 import { createCompany } from '../services/company';
 import { uploadUserPhoto } from '../services/upload';
+import { TeamContext } from './Profile/Team/TeamContextProvider';
 
 const AuthContext = createContext();
 const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
+  const { fetchDataTeam } = useContext(TeamContext);
   const [user, setUser] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userPhoto, setUserPhoto] = useState();
@@ -18,7 +20,7 @@ const AuthProvider = ({ children }) => {
   const [idCompany, setCompanyId] = useState();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchData = () => {
     createAxios
       .get(process.env.REACT_APP_API_URL + '/api/users/me')
       .then((res) => {
@@ -36,6 +38,9 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setIsLoggedIn(false);
       });
+  };
+  useEffect(() => {
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,12 +90,14 @@ const AuthProvider = ({ children }) => {
         navigate('/my-profile');
         const userProfile = await getProfileById(authUser.data.user.id);
         console.log('id profila', userProfile.data.data[0].id);
+        fetchDataTeam();
       }
     } catch (error) {
       console.error(error);
       setUser(null);
     }
   };
+
   const logoutFunction = () => {
     setUser(null);
     localStorage.removeItem('token');

@@ -9,13 +9,15 @@ import MyProfile from './components/Profile/MyProfile';
 import PageNotFound from './components/PageNotFound';
 import PendingForApproval from './components/Profile/PendingForApproval';
 import CompanyInfo from './components/Profile/CompanyInfo';
-import Team from './components/Profile/Team';
-// import Questions from './components/Profile/Questions/Questions';
+import Team from './components/Profile/Team/Team';
+import Questions from './components/Profile/Questions/Questions';
 import AddNewQuestion from './components/Profile/Questions/AddNewQuestion';
 import ProtectedRoute from './ProtectedRoute';
+import TeamEdit from './components/Profile/Team/TeamEdit';
+import AddNewTeamMember from './components/Profile/Team/AddNewTeamMember';
 
 function App() {
-  const { isLoggedIn} = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <ChakraProvider>
@@ -25,7 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={isLoggedIn ? <MyProfile /> : <Login />} />
             <Route path="/register" element={isLoggedIn ? <MyProfile /> : <Register />} />
-            <Route path="/:pageName" element={<PageNotFound />}/>
+            <Route path="/:pageName" element={<PageNotFound />} />
             <Route
               path="/my-profile"
               element={
@@ -50,14 +52,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/questions"
               element={
                 <ProtectedRoute>
                   <Questions />
                 </ProtectedRoute>
               }
-            /> */}
+            />
             <Route
               path="/questions/new"
               element={
@@ -71,6 +73,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Team />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/team/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <TeamEdit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/team/new"
+              element={
+                <ProtectedRoute>
+                  <AddNewTeamMember />
                 </ProtectedRoute>
               }
             />

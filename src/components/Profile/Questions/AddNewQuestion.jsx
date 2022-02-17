@@ -10,21 +10,21 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
-  ModalCloseButton
-} from '@chakra-ui/react';
-import SideBar from '../SideBar';
-import { Link } from 'react-router-dom';
-import { useState, useRef, useContext, useEffect } from 'react';
-import { Select } from '@chakra-ui/react';
-import { addNewQuestion, getQuestions } from '../../../services/questions';
-import { AuthContext } from '../../UserContext';
+  ModalCloseButton,
+} from "@chakra-ui/react";
+import SideBar from "../SideBar";
+import { Link } from "react-router-dom";
+import { useState, useRef, useContext, useEffect } from "react";
+import { Select } from "@chakra-ui/react";
+import { addNewQuestion, getQuestions } from "../../../services/questions";
+import { AuthContext } from "../../UserContext";
 
 const AddNewQuestion = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef();
   const [newQuestion, setNewQuestion] = useState();
   const [questionError, setQuestionError] = useState();
-  const [option, setOption] = useState();
+  const [option, setOption] = useState("0");
   const { idCompany } = useContext(AuthContext);
   const [allQuestions, setAllQuestions] = useState([]);
 
@@ -66,74 +66,84 @@ const AddNewQuestion = () => {
       text: newQuestion,
       type: option,
       order: functionForOrder(),
-      company: idCompany
+      company: idCompany,
     };
     console.log(valueQuestion);
     try {
       if (
         valueQuestion.text &&
-        (valueQuestion.type === 'text' ||
-          valueQuestion.type === 'image' ||
-          valueQuestion.type === 'long_text')
+        (valueQuestion.type === "text" ||
+          valueQuestion.type === "image" ||
+          valueQuestion.type === "long_text")
       ) {
-        setQuestionError('');
+        setQuestionError("");
       } else {
-        setQuestionError('The fields must not be empty');
+        setQuestionError("The fields must not be empty");
       }
       if (valueQuestion.text && valueQuestion.type) {
         await addNewQuestion(valueQuestion);
         onOpen();
       }
+      setOption("0");
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <Flex minHeight="100vh" w="100vw" flexDirection={{ base: 'column', md: 'row' }}>
+    <Flex
+      minHeight="100vh"
+      w="100vw"
+      flexDirection={{ base: "column", md: "row" }}
+    >
       <Box
         display="flex"
         bg="teal.400"
-        minHeight={{ base: '70px', md: '100vh' }}
-        w={{ base: '100%', md: '330px' }}>
-        <SideBar />{' '}
+        minHeight={{ base: "70px", md: "100vh" }}
+        w={{ base: "100%", md: "330px" }}
+      >
+        <SideBar />{" "}
       </Box>
       <Box w="100%">
         <Flex
           minHeight="10vh"
           justifyContent="space-between"
-          p={{ base: '10px 0', sm: '0 20px' }}
-          flexDirection={{ base: 'column', sm: 'row' }}
+          p={{ base: "10px 0", sm: "0 20px" }}
+          flexDirection={{ base: "column", sm: "row" }}
           alignItems="center"
-          borderBottom="1px solid #43b3ac">
-          <Text fontSize={{ base: '22px', sm: '28px' }}>Add New Question</Text>
-          <Link to={'/questions'}>
+          borderBottom="1px solid #43b3ac"
+        >
+          <Text fontSize={{ base: "22px", sm: "28px" }}>Add New Question</Text>
+          <Link to={"/questions"}>
             <Button
               color="white"
               borderRadius="10px"
               bg="teal.400"
               p="3px 20px"
-              _hover={{ bg: 'teal.600' }}
-              _focus={{ outline: 'none' }}>
+              _hover={{ bg: "teal.600" }}
+              _focus={{ outline: "none" }}
+            >
               BACK
             </Button>
           </Link>
         </Flex>
         <Box
-          minH={{ base: '80vh', sm: '90vh' }}
+          minH={{ base: "80vh", sm: "90vh" }}
           display="flex"
           alignItems="center"
-          justifyContent="center">
+          justifyContent="center"
+        >
           <Box
             bg="white"
             mt="20px"
             p="30px 0"
-            mb={{ base: '30px', xl: '0' }}
+            mb={{ base: "30px", xl: "0" }}
             borderRadius="5px"
             fontSize="16px"
             boxShadow="xl"
             color="teal.400"
             textAlign="center"
-            width={{ base: '300px', sm: '450px' }}>
+            width={{ base: "300px", sm: "450px" }}
+          >
             <Box p="0 30px 0 30px">
               <FormControl mb="20px">
                 <Box>
@@ -145,7 +155,7 @@ const AddNewQuestion = () => {
                     onChange={(e) => setNewQuestion(e.target.value)}
                     type="text"
                     placeholder="Question text"
-                    _focus={{ border: '1px solid #007C8C' }}
+                    _focus={{ border: "1px solid #007C8C" }}
                   />
                 </Box>
               </FormControl>
@@ -154,12 +164,14 @@ const AddNewQuestion = () => {
                   Question type
                 </Text>
                 <Select
-                  // value={option}
+                  value={option}
                   onChange={(e) => setOption(e.target.value)}
                   _focus={{
-                    border: '1px solid #007C8C'
-                  }}>
-                  <option value="" selected disabled hidden>
+                    border: "1px solid #007C8C",
+                  }}
+                >
+                  ("");
+                  <option value="0" disabled>
                     Select question type
                   </option>
                   <option value="text">Text</option>
@@ -171,11 +183,20 @@ const AddNewQuestion = () => {
                 <Box color="red">{questionError}</Box>
               ) : (
                 <Box>
-                  <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                  <Modal
+                    finalFocusRef={finalRef}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                  >
                     <ModalOverlay />
-                    <ModalContent width={{ base: '300px', sm: '400px' }} mt="200px">
+                    <ModalContent
+                      width={{ base: "300px", sm: "400px" }}
+                      mt="200px"
+                    >
                       <ModalCloseButton />
-                      <ModalBody m="20px 0">You have successfully added a question!</ModalBody>
+                      <ModalBody m="20px 0">
+                        You have successfully added a question!
+                      </ModalBody>
                     </ModalContent>
                   </Modal>
                 </Box>
@@ -187,8 +208,9 @@ const AddNewQuestion = () => {
                 bg="teal.400"
                 p="3px 40px"
                 mt="20px"
-                _hover={{ bg: 'teal.600' }}
-                _focus={{ outline: 'none' }}>
+                _hover={{ bg: "teal.600" }}
+                _focus={{ outline: "none" }}
+              >
                 Save
               </Button>
             </Box>
