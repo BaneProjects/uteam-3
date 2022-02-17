@@ -3,13 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from '../ProtectedRoute';
 import createAxios from '../services/http';
 import { login, register } from '../services/auth';
-import {
-  getProfileById,
-  createNewProfile,
-  changeName,
-  getName,
-  changeProfilePhoto
-} from '../services/profile';
+import { getProfileById, createNewProfile } from '../services/profile';
 import { createCompany } from '../services/company';
 import { uploadUserPhoto } from '../services/upload';
 
@@ -22,19 +16,17 @@ const AuthProvider = ({ children }) => {
   const [username, setUserName] = useState();
   const [email, setEmail] = useState();
   const [idCompany, setCompanyId] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     createAxios
-      .get('https://uteam-api-7nngy.ondigitalocean.app/api/users/me')
+      .get(process.env.REACT_APP_API_URL + '/api/users/me')
       .then((res) => {
         setUser(res.data);
         setEmail(res.data.email);
-        getName(res.data.id).then((response) => {
-          setUserName(response.data.data[0].attributes.name);
-        });
         getProfileById(res.data.id).then((response) => {
+          setUserName(response.data.data[0].attributes.name);
           setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
-          console.log(response.data.data[0].attributes.profilePhoto.data.attributes.url);
           setCompanyId(response.data.data[0].attributes.company.data.id);
         });
         setIsLoggedIn(true);
@@ -46,30 +38,31 @@ const AuthProvider = ({ children }) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const navigate = useNavigate();
 
   const registerFunction = async (payload, formData) => {
     try {
       let authUser = await register(payload);
-      if (authUser.data.user) {
-        setUserName(authUser.data.user.username);
-        setEmail(authUser.data.user.email);
-        setIsLoggedIn(true);
-        setUser(authUser.data);
-        console.log('id usera', authUser.data.user.id);
-        localStorage.setItem('token', authUser.data.jwt);
-        const companyResponse = await createCompany(payload.company);
-        const photoResponse = await uploadUserPhoto(formData);
-        await createNewProfile(
-          authUser.data.user.id,
-          photoResponse.data[0].id,
-          companyResponse.data.data.id
-        );
-        const userProfile = await getProfileById(authUser.data.user.id);
-        console.log('id profila', userProfile.data.data[0].id);
-        setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
-        navigate('/my-profile');
-      }
+      setEmail(authUser.data.user.email);
+      setIsLoggedIn(true);
+      setUser(authUser.data);
+      setUserName(authUser.data.user.username);
+      console.log('user', authUser);
+      console.log('id usera', authUser.data.user.id);
+      localStorage.setItem('token', authUser.data.jwt);
+      const photoResponse = await uploadUserPhoto(formData);
+      const companyResponse = await createCompany(payload.company);
+      console.log('companyRes', companyResponse);
+      await createNewProfile(
+        authUser.data.user.id,
+        photoResponse.data[0].id,
+        authUser.data.user.username,
+        companyResponse.data.data.id
+      );
+      const userProfile = await getProfileById(authUser.data.user.id);
+      console.log('id profila', userProfile.data.data[0].id);
+      console.log('profile', userProfile);
+      setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
+      navigate('/my-profile');
     } catch (error) {
       throw error.response.data.error.message;
     }
@@ -78,50 +71,26 @@ const AuthProvider = ({ children }) => {
   const loginFunction = async (payload) => {
     try {
       const authUser = await login(payload);
-      setUser(authUser);
-      setEmail(authUser.data.user.email);
-      getName(authUser.data.user.id).then((response) => {
-        setUserName(response.data.data[0].attributes.name);
-      });
-      getProfileById(authUser.data.user.id).then((response) => {
-        setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
-        setCompanyId(response.data.data[0].attributes.company.data.id);
-      });
-      localStorage.setItem('token', authUser.data.jwt);
-      setIsLoggedIn(true);
-      console.log('id usera', authUser.data.user.id);
-      navigate('/my-profile');
-      const userProfile = await getProfileById(authUser.data.user.id);
-      console.log('id profila', userProfile.data.data[0].id);
+      if (authUser) {
+        setUser(authUser);
+        setEmail(authUser.data.user.email);
+        getProfileById(authUser.data.user.id).then((response) => {
+          setUserName(response.data.data[0].attributes.name);
+          setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
+          setCompanyId(response.data.data[0].attributes.company.data.id);
+        });
+        localStorage.setItem('token', authUser.data.jwt);
+        setIsLoggedIn(true);
+        console.log('id usera', authUser.data.user.id);
+        navigate('/my-profile');
+        const userProfile = await getProfileById(authUser.data.user.id);
+        console.log('id profila', userProfile.data.data[0].id);
+      }
     } catch (error) {
       console.error(error);
       setUser(null);
     }
   };
-
-  const changeNameFunction = async (name) => {
-    try {
-      const authUser = await changeName(name);
-      setUserName(authUser.data.data.attributes.name);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const changeProfilePhotoFunction = async (formData) => {
-    try {
-      const photoResponse = await uploadUserPhoto(formData);
-      await changeProfilePhoto(photoResponse.data[0].id);
-      const responseUser = await createAxios.get(
-        'https://uteam-api-7nngy.ondigitalocean.app/api/users/me'
-      );
-      const responseProfile = await getProfileById(responseUser.data.id);
-      setUserPhoto(responseProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const logoutFunction = () => {
     setUser(null);
     localStorage.removeItem('token');
@@ -138,11 +107,11 @@ const AuthProvider = ({ children }) => {
         loginFunction,
         logoutFunction,
         registerFunction,
-        changeNameFunction,
-        changeProfilePhotoFunction,
         isLoggedIn,
         userPhoto,
+        setUserPhoto,
         username,
+        setUserName,
         email,
         idCompany
       }}>

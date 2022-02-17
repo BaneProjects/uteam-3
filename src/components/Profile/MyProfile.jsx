@@ -14,6 +14,9 @@ import SideBar from './SideBar';
 import { FiUser, FiLock } from 'react-icons/fi';
 import React, { useRef, useState, useContext } from 'react';
 import { AuthContext } from '../UserContext';
+import { changeName, changeProfilePhoto, getProfileById } from '../../services/profile';
+import { uploadUserPhoto } from '../../services/upload';
+import createAxios from '../../services/http';
 
 const CFiUser = chakra(FiUser);
 const CFiLock = chakra(FiLock);
@@ -21,9 +24,29 @@ const CFiLock = chakra(FiLock);
 const MyProfile = () => {
   const filePicker = useRef(null);
   const [files, setFile] = useState(null);
-  const { username, email, changeNameFunction, changeProfilePhotoFunction } =
-    useContext(AuthContext);
+  const { username, setUserName, setUserPhoto, email } = useContext(AuthContext);
   const [newUserName, setNewUserName] = useState(username);
+
+  const changeNameFunction = async (name) => {
+    try {
+      const authUser = await changeName(name);
+      setUserName(authUser.data.data.attributes.name);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const changeProfilePhotoFunction = async (formData) => {
+    try {
+      const photoResponse = await uploadUserPhoto(formData);
+      await changeProfilePhoto(photoResponse.data[0].id);
+      const responseUser = await createAxios.get(process.env.REACT_APP_API_URL + '/api/users/me');
+      const responseProfile = await getProfileById(responseUser.data.id);
+      setUserPhoto(responseProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const saveBasicInfo = async (e) => {
     e.preventDefault();
@@ -45,7 +68,7 @@ const MyProfile = () => {
         <Flex
           minHeight="10vh"
           justifyContent={{ base: 'center', md: 'flex-start' }}
-          pl={{base: "0", md:"20px"}}
+          pl={{ base: '0', md: '20px' }}
           alignItems="center"
           borderBottom="1px solid #43b3ac">
           <Text fontSize="28px">My Profile</Text>
