@@ -32,7 +32,7 @@ const Nav = () => {
           {userPhoto && (
             <Img
               src={process.env.REACT_APP_API_URL + userPhoto}
-              w="50px"
+              w="40px"
               mr="10px"
               borderRadius="50%"
               alt="logo"

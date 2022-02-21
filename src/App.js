@@ -12,10 +12,10 @@ import CompanyInfo from './components/Profile/CompanyInfo';
 import Team from './components/Profile/Team';
 import Questions from './components/Profile/Questions/Questions';
 import ProtectedRoute from './ProtectedRoute';
+import PendingDetails from './components/Profile/PendingDetails';
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
-
   return (
     <ChakraProvider>
       <Box backgroundColor="gray.200" width="100%" minHeight={'100vh'}>
@@ -38,6 +38,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PendingForApproval />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pending-details/:id"
+              element={
+                <ProtectedRoute>
+                  <PendingDetails />
                 </ProtectedRoute>
               }
             />
@@ -65,7 +73,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-             
+
             <Route
               path="/team"
               element={

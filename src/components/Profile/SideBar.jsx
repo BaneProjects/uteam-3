@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const SideBar = () => {
   return (
     <Box
+    width="400px"
       display="flex"
       m={{ base: '0 auto' }}
       alignItems={{ base: 'center', md: 'flex-start' }}

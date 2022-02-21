@@ -1,9 +1,10 @@
 import createAxios from './http';
-export const createCompany = async (company) => {
+export const createCompany = async (name) => {
+  console.log('createCompany name', name);
   try {
-    const response = await createAxios.post('/api/companies', {
+    const response = await createAxios.post('/api/companies/', {
       data: {
-        name: `${company}'s Company`
+        name: name
       }
     });
     return response;
@@ -16,7 +17,7 @@ export const getCompany = async (company) => {
   try {
     const response = createAxios.get('/api/companies/' + company, {
       params: {
-        populate: ['logo']
+        populate: ['logo', 'status']
       }
     });
     return response;
@@ -24,7 +25,18 @@ export const getCompany = async (company) => {
     console.log('An error occurred:', error.response);
   }
 };
-
+export const getCompanyAll = async () => {
+  try {
+    const response = createAxios.get('/api/companies/', {
+      params: {
+        'pagination[pageSize]': 100,
+      }
+    });
+    return response;
+  } catch (error) {
+    console.log('An error occurred:', error.response);
+  }
+};
 export const updateCompany = async (idCompany, data) => {
   try {
     const response = createAxios.put(

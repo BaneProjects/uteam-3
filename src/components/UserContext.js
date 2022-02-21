@@ -14,14 +14,14 @@ const AuthProvider = ({ children }) => {
   const [userPhoto, setUserPhoto] = useState();
   const [username, setUserName] = useState();
   const [idCompany, setCompanyId] = useState();
-  useEffect(() => {
+  const fetchData = () => {
     createAxios
       .get('https://uteam-api-7nngy.ondigitalocean.app/api/users/me')
       .then((res) => {
         setUser(res.data);
-        setUserName(res.data.username);
+
         getProfileById(res.data.id).then((response) => {
-          console.log('response', response);
+          setUserName(response.data.data[0].attributes.name);
           setCompanyId(response.data.data[0].attributes.company.data.id);
           setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
         });
@@ -32,9 +32,15 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setIsLoggedIn(false);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const navigate = useNavigate();
+
   const registerFunction = async (payload, formData) => {
     try {
       let authUser = await register(payload);
@@ -44,12 +50,22 @@ const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setUser(authUser.data);
         localStorage.setItem('token', authUser.data.jwt);
-        const companyResponse = await createCompany(payload.company);
+
+        //here we have two cases: to choose an existing company or to create a new company
+        let companyId = null;
+        if (payload.company_is_new) {
+          const companyResponse = await createCompany(payload.new_company_name);
+          companyId = companyResponse.data.data.id;
+        } else {
+          companyId = parseInt(payload.company);
+        }
+
         const photoResponse = await uploadUserPhoto(formData);
         await createNewProfile(
           authUser.data.user.id,
           photoResponse.data[0].id,
-          companyResponse.data.data.id
+          authUser.data.user.username,
+          companyId
         );
         const userProfile = await getProfileById(authUser.data.user.id);
         setUserPhoto(userProfile.data.data[0].attributes.profilePhoto.data.attributes.url);
@@ -65,7 +81,6 @@ const AuthProvider = ({ children }) => {
       setUser(authUser.data.user);
       setUserName(authUser.data.user.username);
       getProfileById(authUser.data.user.id).then((response) => {
-        console.log(response);
         setCompanyId(response.data.data[0].attributes.company.data.id);
         setUserPhoto(response.data.data[0].attributes.profilePhoto.data.attributes.url);
       });
@@ -74,7 +89,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('token', authUser.data.jwt);
         setIsLoggedIn(true);
 
-        navigate('/my-profile');
+        navigate('/pending-for-approval');
       } else {
         console.log('failed login');
         navigate('/');
@@ -101,7 +116,8 @@ const AuthProvider = ({ children }) => {
         isLoggedIn,
         userPhoto,
         username,
-        idCompany
+        idCompany,
+        fetchData
       }}>
       {children}
     </AuthContext.Provider>

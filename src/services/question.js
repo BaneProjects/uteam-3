@@ -1,5 +1,18 @@
 import createAxios from './http';
 
+export const getQuestionsByCompanyId = async (companyId) => {
+  try {
+    const response = createAxios.get('api/questions/', {
+      params: {
+        'filters[company][id][$eq]': companyId,
+        populate: ['company', 'answers']
+      }
+    });
+    return response;
+  } catch (error) {
+    console.log('An error occurred:', error.response);
+  }
+};
 export const getQuestions = async (companyId) => {
   try {
     const response = createAxios.get('api/questions/', {

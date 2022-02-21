@@ -1,7 +1,10 @@
 import { Flex, Box } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { deleteComById, getCompanyAll } from '../../services/company';
 import SideBar from './SideBar';
 
 const Team = () => {
+
   return (
     <Flex  w="100vw" flexDirection={{ base: 'column', md: 'row' }}>
       <Box

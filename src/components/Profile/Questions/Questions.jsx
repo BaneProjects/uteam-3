@@ -63,9 +63,7 @@ const Questions = (props) => {
   const refresh = () => {
     setSpinner(true);
     if (idCompany) {
-      console.log('Branislav', idCompany);
       getQuestions(idCompany).then((res) => {
-        console.log('question', res);
         setSpinner(false);
         if (res && res.data && Array.isArray(res.data.data)) {
           const sortiraniQuestions = sortQuestionsbyOrder(res.data.data);
@@ -142,78 +140,80 @@ const Questions = (props) => {
 
   return (
     <>
-      <Flex minHeight="100vh" w="100vw" flexDirection={{ base: 'column', md: 'row' }}>
-        <Box
-          display="flex"
-          bg="teal.400"
-          minHeight={{ base: '70px', md: '100vh' }}
-          w={{ base: '100%', md: '330px' }}>
-          <SideBar />{' '}
-        </Box>
-        <Box w="100%">
-          <Flex
-            minHeight="10vh"
-            justifyContent="space-between"
-            p={{ base: '8px 0', sm: '0 20px' }}
-            flexDirection={{ base: 'column', sm: 'row' }}
-            alignItems="center"
-            borderBottom="1px solid #43b3ac">
-            {!editMode && (
-              <>
-                <Text fontSize={{ base: '22px', sm: '28px' }}>Questions</Text>
-                <Link to={'/add-new-question'}>
-                  <Button
-                    color="white"
-                    borderRadius="10px"
-                    bg="teal.400"
-                    p="3px 20px"
-                    _hover={{ bg: 'teal.600' }}
-                    _focus={{ outline: 'none' }}>
-                    <CloseIcon transform={'rotate(45deg)'} marginRight={'10px'} /> Add new question
-                  </Button>
-                </Link>
-              </>
-            )}
-            {editMode && (
-              <>
-                <Text fontSize={{ base: '22px', sm: '28px' }}>Edit Question</Text>
-              </>
-            )}
-          </Flex>
-
-          {spinner && <Spiner />}
-
-          {editMode && editingQuestion && (
-            <QuestionItemEdit
-              key={id}
-              question={editingQuestion}
-              editingQuestionId={editingQuestionId}
-              editingQuestionsInputs={editingQuestionsInputs}
-              handleChangeEditingQuestions={handleChangeEditingQuestions}
-              handleSave={_handleSave}
-            />
-          )}
-
+    <Flex  w="100vw" flexDirection={{ base: 'column', md: 'row' }}>
+      <Box
+        display="flex"
+        bg="teal.400"
+        minHeight={{ base: '70px', md: '100vh' }}
+        w={{ base: '100%', md: '230px' }}>
+        <SideBar />
+      </Box>
+      <Box w="100%">
+        
+        <Flex
+        
+          minHeight="10vh"
+          justifyContent="space-between"
+          p={{ base: '8px 0', sm: '0 20px' }}
+          flexDirection={{ base: 'column', sm: 'row' }}
+          alignItems="center"
+          borderBottom="1px solid #43b3ac">
           {!editMode && (
-            <ReactDragListView {...dragProps}>
-              {questions.map((question) => {
-                const id = question.id;
-                return (
-                  <QuestionItem
-                    key={id}
-                    originalIndex={getOriginalIndexById(id, questionsOriginal)}
-                    question={question}
-                    editingQuestionId={editingQuestionId}
-                    setEditingQuestionId={setEditingQuestionId}
-                    handleDelete={_handleDelete}
-                  />
-                );
-              })}
-            </ReactDragListView>
+            <>
+              <Text fontSize={{ base: '22px', sm: '28px' }}>Questions</Text>
+              <Link to={'/add-new-question'}>
+                <Button
+                  color="white"
+                  borderRadius="10px"
+                  bg="teal.400"
+                  p="3px 20px"
+                  _hover={{ bg: 'teal.600' }}
+                  _focus={{ outline: 'none' }}>
+                  <CloseIcon transform={'rotate(45deg)'} marginRight={'10px'} /> Add new question
+                </Button>
+              </Link>
+            </>
           )}
-        </Box>
-      </Flex>
-    </>
+          {editMode && (
+            <>
+              <Text fontSize={{ base: '22px', sm: '28px' }}>Edit Question</Text>
+            </>
+          )}
+        </Flex>
+
+        {spinner && <Spiner />}
+
+        {editMode && editingQuestion && (
+          <QuestionItemEdit
+            key={id}
+            question={editingQuestion}
+            editingQuestionId={editingQuestionId}
+            editingQuestionsInputs={editingQuestionsInputs}
+            handleChangeEditingQuestions={handleChangeEditingQuestions}
+            handleSave={_handleSave}
+          />
+        )}
+
+        {!editMode && (
+          <ReactDragListView {...dragProps}>
+            {questions.map((question) => {
+              const id = question.id;
+              return (
+                <QuestionItem
+                  key={id}
+                  originalIndex={getOriginalIndexById(id, questionsOriginal)}
+                  question={question}
+                  editingQuestionId={editingQuestionId}
+                  setEditingQuestionId={setEditingQuestionId}
+                  handleDelete={_handleDelete}
+                />
+              );
+            })}
+          </ReactDragListView>
+        )}
+      </Box>
+    </Flex>
+   </>
   );
 };
 

@@ -7,42 +7,49 @@ import {
   chakra,
   Text,
   InputLeftElement,
-  InputGroup
+  InputGroup,
+  Checkbox
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { FiUser, FiLock } from 'react-icons/fi';
 import { HiOutlineMail, HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { useForm } from 'react-hook-form';
 import { useAuthContext } from './UserContext';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Select } from '@chakra-ui/react';
+import { getCompanyAll } from '../services/company';
 const CFiUser = chakra(FiUser);
 const CHiOutlineMail = chakra(HiOutlineMail);
 const CFiLock = chakra(FiLock);
+
 const Register = () => {
-  const { register, handleSubmit } = useForm();
+  const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    // get all company in the drop-down list
+    getCompanyAll().then((response) => {
+      setCompanies(response.data.data);
+    });
+  }, []);
+
+  const { register, handleSubmit, watch } = useForm();
   const { registerFunction } = useAuthContext();
   const filePicker = useRef(null);
   const [files, setFile] = useState(null);
   const [error, setRegistrationError] = useState(null);
   const [duplicateEmail, setDuplicateEmail] = useState(null);
+
+  const company_is_new = watch('company_is_new');
+  console.log('company_is_new', company_is_new);
+
   const onSubmit = async (user) => {
     try {
-      if (!user.name || !user.email || !user.company || !user.password || files === null) {
+      console.log('user', user);
+      if (!user.name || !user.email || !user.password || files === null) {
         setRegistrationError('You did not enter all the correct data');
         return;
       } else {
         setRegistrationError(null);
-      }
-      if (
-        typeof user.name === 'string' ||
-        typeof user.email === 'string' ||
-        typeof user.company === 'string' ||
-        typeof user.password === 'string'
-      ) {
-        setRegistrationError(null);
-      } else {
-        setRegistrationError('You did not enter all the correct data');
-        return;
       }
       if (user.password.length < 6) {
         setRegistrationError('Password must have at least 6 characters');
@@ -52,11 +59,13 @@ const Register = () => {
       }
       const formData = new FormData();
       formData.append('files', files[0]);
+
       await registerFunction(user, formData);
     } catch (error) {
       setDuplicateEmail(error);
     }
   };
+
   return (
     <Flex justifyContent="center" alignItems="center">
       <Box w={{ base: '300px', sm: '400px' }} color="teal.400" textAlign="center">
@@ -91,19 +100,43 @@ const Register = () => {
                   _focus={{ border: '1px solid #007C8C' }}></Input>
               </InputGroup>
             </FormControl>
-            <FormControl mb="20px">
-              <Text textAlign="left" mb="2.5px">
-                Company
-              </Text>
-              <InputGroup color="black">
-                <InputLeftElement children={<HiOutlineOfficeBuilding opacity={'0.2'} />} />
-                <Input
-                  {...register('company')}
-                  type="text"
-                  placeholder="Enter a Company"
-                  _focus={{ border: '1px solid #007C8C' }}></Input>
-              </InputGroup>
+            <FormControl mb="20px" display="flex">
+              <Checkbox {...register('company_is_new')}>Create new company</Checkbox>
             </FormControl>
+            {company_is_new && (
+              <FormControl mb="20px">
+                <Text textAlign="left" mb="2.5px">
+                  New company name
+                </Text>
+                <InputGroup color="black">
+                  <InputLeftElement children={<HiOutlineOfficeBuilding opacity={'0.2'} />} />
+                  <Input
+                    {...register('new_company_name')}
+                    type="text"
+                    placeholder="Enter a Company"
+                    _focus={{ border: '1px solid #007C8C' }}></Input>
+                </InputGroup>
+              </FormControl>
+            )}
+            {!company_is_new && (
+              <FormControl mb="20px">
+                <Text textAlign="left" mb="2.5px">
+                  Select a Company
+                </Text>
+                <Select
+                  {...register('company')}
+                  placeholder="--Select a Company--"
+                  cursor="pointer">
+                  {companies.map((company) => {
+                    return (
+                      <option key={company.id} value={company.id}>
+                        {company.attributes.name}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            )}
             <FormControl mb="20px">
               <Text textAlign="left" mb="2.5px">
                 Password

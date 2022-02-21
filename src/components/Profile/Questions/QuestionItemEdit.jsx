@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Flex, Box, Button, Input } from '@chakra-ui/react';
 import { CloseIcon, CheckIcon } from '@chakra-ui/icons';
-import { _sortQuestionsbyOrder } from '../../../utils/sort-utils';
 import { useNavigate } from 'react-router-dom';
 
 const QuestionItemEdit = (props) => {
