@@ -1,6 +1,5 @@
 import createAxios from './http';
 export const createCompany = async (name) => {
-  console.log('createCompany name', name);
   try {
     const response = await createAxios.post('/api/companies/', {
       data: {
@@ -29,7 +28,7 @@ export const getCompanyAll = async () => {
   try {
     const response = createAxios.get('/api/companies/', {
       params: {
-        'pagination[pageSize]': 100,
+        'pagination[pageSize]': 100
       }
     });
     return response;

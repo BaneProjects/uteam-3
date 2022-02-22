@@ -12,7 +12,7 @@ export const usePendingSingle = (idCompany, profileId) => {
     pending: '',
     dateJoined: ''
   });
-
+   
   const fetchProfileByCompanyId = () => {
     if (idCompany) {
       getProfileByCompanyId(idCompany).then((response) => {

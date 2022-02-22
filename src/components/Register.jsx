@@ -40,7 +40,7 @@ const Register = () => {
   const [duplicateEmail, setDuplicateEmail] = useState(null);
 
   const company_is_new = watch('company_is_new');
-  console.log('company_is_new', company_is_new);
+
 
   const onSubmit = async (user) => {
     try {

@@ -16,14 +16,22 @@ import { usePendingSingle } from '../../hooks/usePendingSingle';
 import { apiEditPendingDetails } from '../../services/pendingUpdate';
 import { ChangeUserStatusById, DeliteProfileById } from '../../services/profile';
 import { getQuestionsByCompanyId } from '../../services/question';
+import { updateAnswer, updateAnswerWithPhoto } from '../../services/updateAnswer';
 import { AuthContext } from '../UserContext';
+
+const getLastItemFromArray = (arr) => {
+  if (arr.length === 0) {
+    return null;
+  }
+  return arr[arr.length - 1]; // return last item
+};
 
 const PendingDetails = () => {
   let { id } = useParams();
   const profileId = parseInt(id);
+  const [multiQA, setMultiQA] = useState([]);
 
-  const [question, setQuestions] = useState();
-
+  console.log('test', multiQA);
   const navigate = useNavigate();
   const filePicker = useRef(null);
   const [files, setFile] = useState(null);
@@ -32,6 +40,7 @@ const PendingDetails = () => {
   const [single, handleChange, refresh] = usePendingSingle(idCompany, profileId);
 
   const handleSubmit = (e) => {
+    //submit for basic info
     e.preventDefault();
     const formData = new FormData();
     formData.append('files', files[0]);
@@ -42,16 +51,111 @@ const PendingDetails = () => {
     });
   };
 
-  //set question by company id
+  //set questions by company id
   useEffect(() => {
     if (idCompany) {
       getQuestionsByCompanyId(idCompany).then((response) => {
+        console.log('QA', response);
         if (response && response.data && Array.isArray(response.data.data)) {
-          setQuestions(response.data.data);
+          const questions = response.data.data;
+
+          const _answers = questions.map((question) => {
+            const _answer = getLastItemFromArray(question.attributes.answers.data);
+            let _answer_id = null;
+            let _answer_text = null;
+            if (_answer && _answer.id && _answer.attributes && _answer.attributes.answer) {
+              _answer_id = _answer.id;
+              _answer_text = _answer.attributes.answer;
+            }
+            const qa = {
+              question_id: question.id,
+              type: question.attributes.type,
+              text: question.attributes.text,
+              answer_id: _answer_id,
+              answer: _answer_text,
+              files: null
+            };
+            return qa;
+          });
+          setMultiQA(_answers);
         }
       });
     }
   }, [idCompany]);
+
+  const multiHandleChange = (id, e) => {
+    console.log('e', e);
+    const target = e.target;
+
+    let value = null;
+    if (target.type === 'checkbox') {
+      value = target.cheked;
+    } else if (target.type === 'file') {
+      value = null; 
+    } else {
+      value = target.value;
+    }
+    const changedMultiAnswers = multiQA.map((q) => {
+      if (q.question_id === id) {
+        if (target.type === 'file') {
+          // ako je polje input FILE
+          const files = target.files;
+          const changedAnswer = {
+            ...q,
+            files: files
+          };
+          return changedAnswer;
+        } else {
+          // ako je polje input text
+          const changedAnswer = {
+            ...q,
+            answer: value
+          };
+          return changedAnswer;
+        }
+      }
+      return q;
+    });
+
+    setMultiQA(changedMultiAnswers);
+  };
+
+  const handleClickSaveAnswers = (question_id) => {
+    const qaforSubmit = multiQA.filter((q) => {
+      if (q.question_id === question_id) {
+        return true;
+      }
+      return false;
+    });
+    if (qaforSubmit[0]) {
+      const dataZaSubmitAnswers = qaforSubmit[0]; // ovo su data iz kojih treba izvici podatke i spakovati ih za api
+
+      if (dataZaSubmitAnswers.type === 'text' || dataZaSubmitAnswers.type === 'long_text') {
+        const data = {
+          question: dataZaSubmitAnswers.question_id,
+          profile: profileId,
+          answer: dataZaSubmitAnswers.answer
+        };
+        updateAnswer(dataZaSubmitAnswers.answer_id, data).then((res) => {
+          console.log('resonseodupdate', res);
+        });
+      } else if (dataZaSubmitAnswers.type === 'image') {
+        // u sluacaju kad je answer type IMAGE
+        const formData = new FormData();
+        formData.append('files', dataZaSubmitAnswers.files[0]);
+        updateAnswerWithPhoto(formData).then(() => {
+          const data = {
+            question: dataZaSubmitAnswers.question_id,
+            profile: profileId,
+            answer: dataZaSubmitAnswers.answer
+          };
+          updateAnswer(dataZaSubmitAnswers.answer_id, data).then((res) => {
+            console.log('updateResponsePhoto', res);
+          });
+        });
+      }
+    }
+  };
 
   const changeUserStatus = () => {
     ChangeUserStatusById(profileId).then((response) => {
@@ -198,7 +302,7 @@ const PendingDetails = () => {
             <Box
               minWidth="350px"
               borderRadius="5px"
-              minHeight="350px"
+              minHeight="300px"
               border-top="none"
               bg="white"
               boxShadow="0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 5px 16px 0 rgba(0, 0, 0, 0.17)">
@@ -213,41 +317,88 @@ const PendingDetails = () => {
                 </Heading>
               </Box>
               <FormControl>
-                {question &&
-                  question.map((question, num) => {
-                    const number = num + 1;
+                {multiQA &&
+                  multiQA.map((q, index) => {
+                    const number = index + 1;
                     return (
-                      <Box key={question.id}>
-                        {question.attributes.type === 'text' && (
+                      <Box key={q.question_id}>
+                        {q.type === 'text' && (
                           <Box borderBottom="2px solid gray">
                             <Box padding="20px">
                               <Text textAlign="left">
-                                Question {number} - {question.attributes.text}
+                                Question {number} - {q.text}
                               </Text>
-                              <InputGroup color="black">
-                                <Input type="text" />
-                              </InputGroup>
+                              <Flex>
+                                <InputGroup color="black">
+                                  <Input
+                                    type="text"
+                                    name="answer"
+                                    value={q.answer}
+                                    onChange={(e) => {
+                                      multiHandleChange(q.question_id, e);
+                                    }}
+                                  />
+                                </InputGroup>
+                                <Button
+                                  marginLeft="5px"
+                                  color="white"
+                                  borderRadius="10px"
+                                  bg="teal.400"
+                                  p="3px 20px"
+                                  ml="10px"
+                                  _hover={{ bg: 'teal.600' }}
+                                  _focus={{ outline: 'none' }}
+                                  onClick={(e) => {
+                                    handleClickSaveAnswers(q.question_id);
+                                  }}>
+                                  save
+                                </Button>
+                              </Flex>
                             </Box>
                           </Box>
                         )}
-                        {question.attributes.type === 'long_text' && (
+                        {q.type === 'long_text' && (
                           <Box borderBottom="2px solid gray">
                             <Box padding="20px">
                               <Text textAlign="left">
-                                Question {number} - {question.attributes.text}
+                                Question {number} - {q.text}
                               </Text>
-                              <InputGroup color="black">
-                                <Input type="text" />
-                              </InputGroup>
+
+                              <Flex>
+                                <InputGroup color="black">
+                                  <Input
+                                    type="text"
+                                    name="answer"
+                                    value={q.answer}
+                                    onChange={(e) => {
+                                      multiHandleChange(q.question_id, e);
+                                    }}
+                                  />
+                                </InputGroup>
+                                <Button
+                                  marginLeft="5px"
+                                  color="white"
+                                  borderRadius="10px"
+                                  bg="teal.400"
+                                  p="3px 20px"
+                                  ml="10px"
+                                  _hover={{ bg: 'teal.600' }}
+                                  _focus={{ outline: 'none' }}
+                                  onClick={(e) => {
+                                    handleClickSaveAnswers(q.question_id);
+                                  }}>
+                                  save
+                                </Button>
+                              </Flex>
                             </Box>
                           </Box>
                         )}
 
-                        {question.attributes.type === 'image' && (
+                        {q.type === 'image' && (
                           <Box borderBottom="2px solid gray">
                             <Box padding="20px">
                               <Text textAlign="left" marginBottom="20px">
-                                Question {number} -{question.attributes.text}
+                                Question {number} -{q.text}
                               </Text>
 
                               <Flex justifyContent="space-between">
@@ -285,8 +436,12 @@ const PendingDetails = () => {
                                     required
                                     type="file"
                                     ref={filePicker}
-                                    display="none"
-                                    onChange={(e) => setFile(e.target.files)}
+                                    display1111111="none"
+                                    name="answer"
+                                    value={q.files}
+                                    onChange={(e) => {
+                                      multiHandleChange(q.question_id, e);
+                                    }}
                                   />
                                 </InputGroup>
                                 <Box>OVDE IDE SLIKA</Box>
@@ -298,18 +453,6 @@ const PendingDetails = () => {
                     );
                   })}
               </FormControl>
-              <Flex justifyContent="flex-end" padding="20px">
-                <Button
-                  color="white"
-                  borderRadius="10px"
-                  bg="teal.400"
-                  p="3px 20px"
-                  ml="10px"
-                  _hover={{ bg: 'teal.600' }}
-                  _focus={{ outline: 'none' }}>
-                  Save
-                </Button>
-              </Flex>
             </Box>
           </Flex>
         </Flex>
