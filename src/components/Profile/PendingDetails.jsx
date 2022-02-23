@@ -34,6 +34,7 @@ const PendingDetails = () => {
   console.log('test', multiQA);
   const navigate = useNavigate();
   const filePicker = useRef(null);
+  const filePicker2 = useRef(null);
   const [files, setFile] = useState(null);
   const { idCompany, fetchData } = useContext(AuthContext);
 
@@ -91,14 +92,13 @@ const PendingDetails = () => {
     if (target.type === 'checkbox') {
       value = target.cheked;
     } else if (target.type === 'file') {
-      value = null; 
+      value = null;
     } else {
       value = target.value;
     }
     const changedMultiAnswers = multiQA.map((q) => {
       if (q.question_id === id) {
         if (target.type === 'file') {
-          // ako je polje input FILE
           const files = target.files;
           const changedAnswer = {
             ...q,
@@ -106,7 +106,7 @@ const PendingDetails = () => {
           };
           return changedAnswer;
         } else {
-          // ako je polje input text
+          // the field is input text
           const changedAnswer = {
             ...q,
             answer: value
@@ -128,7 +128,7 @@ const PendingDetails = () => {
       return false;
     });
     if (qaforSubmit[0]) {
-      const dataZaSubmitAnswers = qaforSubmit[0]; // ovo su data iz kojih treba izvici podatke i spakovati ih za api
+      const dataZaSubmitAnswers = qaforSubmit[0]; //this is the data from which the data should be reported and packed for api
 
       if (dataZaSubmitAnswers.type === 'text' || dataZaSubmitAnswers.type === 'long_text') {
         const data = {
@@ -140,7 +140,8 @@ const PendingDetails = () => {
           console.log('resonseodupdate', res);
         });
       } else if (dataZaSubmitAnswers.type === 'image') {
-        // u sluacaju kad je answer type IMAGE
+        console.log('slika je');
+
         const formData = new FormData();
         formData.append('files', dataZaSubmitAnswers.files[0]);
         updateAnswerWithPhoto(formData).then(() => {
@@ -395,17 +396,15 @@ const PendingDetails = () => {
                         )}
 
                         {q.type === 'image' && (
-                          <Box borderBottom="2px solid gray">
-                            <Box padding="20px">
+                          <Flex borderBottom="2px solid gray">
+                            <Flex padding="20px" flexDirection="column">
                               <Text textAlign="left" marginBottom="20px">
                                 Question {number} -{q.text}
                               </Text>
 
-                              <Flex justifyContent="space-between">
+                              <Flex justifyContent="space-between" flexDirection="column">
                                 <InputGroup
-                                  width="50%"
                                   display="flex"
-                                  justifyContent="space-between"
                                   alignItems="center"
                                   mb="20px"
                                   border="1px solid #cbd5e0"
@@ -420,34 +419,49 @@ const PendingDetails = () => {
                                     bg="teal.400"
                                     borderRadius="10px"
                                     onClick={() => {
-                                      filePicker.current.click();
+                                      filePicker2.current.click();
                                     }}>
                                     {' '}
                                     chose file
                                   </Button>
-                                  <Text
-                                    htmlFor="file-upload"
-                                    fontSize="12px"
-                                    color="black.200"
-                                    marginLeft="12px">
+                                  /
+                                  <Text htmlFor="file-upload" fontSize="12px" color="black.200">
                                     {files ? files[0].name : 'Upload file'}
                                   </Text>
                                   <Input
                                     required
                                     type="file"
-                                    ref={filePicker}
-                                    display1111111="none"
                                     name="answer"
                                     value={q.files}
+                                    ref={filePicker2}
+                                    display="none"
                                     onChange={(e) => {
                                       multiHandleChange(q.question_id, e);
                                     }}
                                   />
                                 </InputGroup>
-                                <Box>OVDE IDE SLIKA</Box>
+                                <Box display="flex" flexDirection="column">
+                                  {<Img src={q.answer}></Img>}
+                                </Box>
+                                <Button
+                                  marginLeft="5px"
+                                  color="white"
+                                  w="80px"
+                                  marginTop="20px"
+                                  borderRadius="10px"
+                                  bg="teal.400"
+                                  p="3px 20px"
+                                  ml="10px"
+                                  _hover={{ bg: 'teal.600' }}
+                                  _focus={{ outline: 'none' }}
+                                  onClick={(e) => {
+                                    handleClickSaveAnswers(q.question_id);
+                                  }}>
+                                  save
+                                </Button>
                               </Flex>
-                            </Box>
-                          </Box>
+                            </Flex>
+                          </Flex>
                         )}
                       </Box>
                     );

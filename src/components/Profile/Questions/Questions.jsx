@@ -64,6 +64,7 @@ const Questions = (props) => {
     setSpinner(true);
     if (idCompany) {
       getQuestions(idCompany).then((res) => {
+        console.log("pitanja", res)
         setSpinner(false);
         if (res && res.data && Array.isArray(res.data.data)) {
           const sortiraniQuestions = sortQuestionsbyOrder(res.data.data);
